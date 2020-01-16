@@ -1,0 +1,7 @@
+PrettyTable>=0.7
+cloudscraper>=1.2.18
+requests>=2.22.0
+beautifulsoup4>=4.8.2
+img2pdf>=0.3.3
+tqdm>=4.41.1
+html5lib>=1.0.1
