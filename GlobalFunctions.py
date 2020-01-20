@@ -25,37 +25,41 @@ class GlobalFunctions:
         os.system('cls' if os.name=='nt' else 'clear')
     
     def mainMenu():
-        GlobalFunctions.cls()
-        choice = input("""
-        ***PLEASE MAKE YOUR SELECTION***
+        try:
+            GlobalFunctions.cls()
+            choice = input("""
+            ***PLEASE MAKE YOUR SELECTION***
 
-        1: Run batch downloader
-        2: Add/Remove Comics
+            1: Run batch downloader
+            2: Add/Remove Comics
+            
+            0: Quit
 
-        0: Quit
+            S: Modify System Settings
 
-        S: Modify System Settings
+            Please enter your choice: """)
 
-        Please enter your choice: """)
-
-        if choice == "1":
-            GlobalFunctions.comicDownload()
-        elif choice == "2":
-            GlobalFunctions.addRemoveComicMenu()
-        elif choice=="0":
-            sys.exit
-        elif choice == "S" or choice == "s":
-            GlobalFunctions.modifySettingsMenu()
-        else:
-            print("You must only select a valid entry.")
-            print("Please try again")
-            GlobalFunctions.mainMenu()
+            if choice == "1":
+                GlobalFunctions.comicDownload()
+            elif choice == "2":
+                GlobalFunctions.addRemoveComicMenu()
+            elif choice=="0":
+                GlobalFunctions.cls()
+                sys.exit
+            elif choice == "S" or choice == "s":
+                GlobalFunctions.modifySettingsMenu()
+            else:
+                print("You must only select a valid entry.")
+                print("Please try again")
+                GlobalFunctions.mainMenu()
+        except EnvironmentError as e:
+            print(e)
 
     def add_new_comic():
         try:
             GlobalFunctions.cls()
             #Create connections to database
-            conn = sqlite3.connect("comicDatabase.db")
+            conn = sqlite3.connect("./config/comicDatabase.db")
             cur = conn.cursor()
 
             #Get the current list of comics
@@ -103,7 +107,7 @@ class GlobalFunctions:
         GlobalFunctions.cls()
 
         #Create connections to database
-        conn = sqlite3.connect("comicDatabase.db")
+        conn = sqlite3.connect("./config/comicDatabase.db")
         cur = conn.cursor()
 
         #Get the current list of comics
@@ -138,6 +142,7 @@ class GlobalFunctions:
         1: Add New Comic to tracker
         2: Remove Comic from tracker
         3: Download Single Comic or Series without tracking
+        4: Search for Comics
 
         0: Quit
 
@@ -149,10 +154,13 @@ class GlobalFunctions:
             GlobalFunctions.add_new_comic()
         elif choice == "2":
             GlobalFunctions.remove_comic()
-        elif choice=="0":
-            sys.exit
-        elif choice=="3":
+        elif choice == "3":
             GlobalFunctions.single_comic_download()
+        elif choice == "4":
+            GlobalFunctions.comicSearch()
+        elif choice=="0":
+            GlobalFunctions.cls()
+            sys.exit
         elif choice == "M" or choice == "m":
             GlobalFunctions.mainMenu()
         else:
@@ -163,7 +171,7 @@ class GlobalFunctions:
     def comicDownload():
         GlobalFunctions.cls()
         #Create connections to database
-        conn = sqlite3.connect("comicDatabase.db")
+        conn = sqlite3.connect("./config/comicDatabase.db")
         cur = conn.cursor()
 
         #Get the current list of comics
@@ -289,12 +297,28 @@ class GlobalFunctions:
                         for issuePage in os.listdir(tmpPath):
                             zipObj.write(tmpPath + "/" + issuePage)
                             os.remove(tmpPath + "/" + issuePage)
-                        zipObj.close()    
+                        zipObj.close()
 
                         # Remove the temp directory housing the downloaded jpeg files.
                         os.rmdir(tmpPath)
                         # Commit the change to the database.
                         conn.commit() 
+
+                    #Create connections to database
+                    conn = sqlite3.connect("./config/comicDatabase.db")
+                    cur = conn.cursor()
+
+                    completed = "<span class=\"info\">Status:</span>&nbsp;Completed"
+                    ongoing = "<span class=\"info\">Status:</span>&nbsp;Ongoing"
+
+                    if completed in page.text:
+                        dropComicSql = "DELETE FROM _comicURLs WHERE name is '" + title + "'"
+                        cur.execute(dropComicSql)
+                    elif ongoing in page.text:
+                        continue
+
+                    # Commit the change to the database.
+                    conn.commit()
                             
                 except sqlite3.IntegrityError:
                     print('ERROR') 
@@ -303,7 +327,7 @@ class GlobalFunctions:
 
         conn.close()
     def single_comic_download():
-        conn = sqlite3.connect("comicDatabase.db")
+        conn = sqlite3.connect("./config/comicDatabase.db")
         cur = conn.cursor()
         root_path_query = "SELECT * FROM _config"
         cur.execute(root_path_query)
@@ -315,7 +339,7 @@ class GlobalFunctions:
 
         try:
             newComic = input ("""Enter URL for new comic (Leave blank and press Enter to return to menu): """)
-            if newComic is None:
+            if not newComic:
                 GlobalFunctions.addRemoveComicMenu()                
         except:
             GlobalFunctions.addRemoveComicMenu()
@@ -341,7 +365,7 @@ class GlobalFunctions:
 
         soup = BeautifulSoup(page.text,"html5lib")
         table = soup.find("table")
-
+        
         comicFolder = title[4].replace("-"," ")
         
         for i in range (1,3):
@@ -426,7 +450,7 @@ class GlobalFunctions:
     def modifySettingsMenu():
         GlobalFunctions.cls()
 
-        conn = sqlite3.connect("comicDatabase.db")
+        conn = sqlite3.connect("./config/comicDatabase.db")
         cur = conn.cursor()
         root_path_query = "SELECT * FROM _config"
         cur.execute(root_path_query)
@@ -461,7 +485,7 @@ class GlobalFunctions:
     def set_comic_root_path():
         GlobalFunctions.cls()
 
-        conn = sqlite3.connect("comicDatabase.db")
+        conn = sqlite3.connect("./config/comicDatabase.db")
         cur = conn.cursor()
         root_path_query = "SELECT * FROM _config"
         cur.execute(root_path_query)
@@ -472,6 +496,11 @@ class GlobalFunctions:
 
         try:
             comicPath = input("Enter the path to your comic directory (Current is: " + rootPath + "): ")
+            
+            while not comicPath:
+                print("No path selected.")
+                comicPath = input("Enter the path to your comic directory (Current is: " + rootPath + "): ")
+            
             comicPath = comicPath.replace("\\","/")
             updateRootPathSql = "UPDATE _config SET comicFolder = '" + comicPath + "'"
             cur.execute(updateRootPathSql)
@@ -481,3 +510,120 @@ class GlobalFunctions:
         
         conn.close()
         GlobalFunctions.modifySettingsMenu()
+
+    def comicSearch():
+        try:
+            GlobalFunctions.cls()
+
+            sess = requests.session()
+            sess = cloudscraper.create_scraper(sess, delay=10)
+
+            headers = {
+            'accept':'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+            'accept-encoding':'gzip, deflate, br',
+            'accept-language':'en-US,en;q=0.9',
+            'cache-control':'max-age=0',
+            'content-length':'14',
+            'content-type':'application/x-www-form-urlencoded',
+            'cookie':'__cfduid=dc1f7b5c6d3dc6c09877ec8c1db8825bb1579376561; cf_clearance=e05005f85cead71365de805fe48b6a04e7cce3b3-1579376568-0-150',
+            'origin':'https://readcomiconline.to',
+            'referer':'https://readcomiconline.to/?__cf_chl_jschl_tk__=f435b3d2677af519c8db9a0cbf4069b3bba9b945-1579376564-0-AdV7lFWCg777vJQrgIIqmNJoP9mCURkfhAhA89qi19zQDJgHV5UiYotxKLM3LESw3gzh0rnvUts0SpJD9AnWfqyTIOb8FdI25IPvOv8JGQILVJvE-1KTpQDpCvVyvAXZEyoHh_DvyUM3q7bl6DZEuSLH6D9ulhUmfeJGsa1VewRwduUiBeXWvFT8MHC89otn2Lcvt-xx1fPUeCd9_jc9MwLO3TjusjrOH7kNv7MhfoTv9ghLATdjm7SuVXRJhiOF9ih7Rh_D0UyQNJWeaTNVbCk',
+            'sec-fetch-mode':'navigate',
+            'sec-fetch-site':'same-origin',
+            'sec-fetch-user':'?1',
+            'upgrade-insecure-requests':'1',
+            'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36'
+            }
+
+            searchData = input("What comic would you like to search for (Ctrl+C to exit)? ")
+            
+            while not searchData:
+                GlobalFunctions.cls()
+                print("No valid criteria entered.")
+                searchData = input("What comic would you like to search for (Ctrl+C to exit)? ")
+
+            data = {
+                'keyword': "'"+searchData+"'"
+            }
+
+            page = sess.get('https://readcomiconline.to/Search/Comic', data=data, headers=headers)
+            time.sleep(5)
+
+            soup = BeautifulSoup(page.text,"html5lib")
+
+            table = soup.find("table")
+
+            for i in range (1,2):
+                try:
+                    findLinks = table.find_all('a') 
+                except EnvironmentError as e:
+                    print(e)
+
+            # Let's create our table
+            searchTable = PrettyTable()
+            searchTable.field_names = ["Number", "Title", "Comic URL"]
+
+            searchTable.align["Number"] = "l"
+            searchTable.align["Title"] = "l"
+            searchTable.align["Comic URL"] = "l"
+
+            x = 1
+            linkList = []
+
+            for link in findLinks:
+                newLink = link.get('href')
+                title = newLink.split("/")
+                if len(title) == 3:
+                    title = title[2].replace("-"," ")
+                    searchTable.add_row([str(x),title,newLink])
+                    linkList.append(newLink)
+                    x = x+1                    
+
+            print(searchTable.get_string(fields=["Number","Title"]))
+            selection = int(input("Enter the number for the comic you want to enter: "))
+            print(linkList[selection-1])
+            
+            if selection is None:
+                input("No comic selected. Press Enter to return to the main menu.")
+                GlobalFunctions.mainMenu()
+
+            selectedLink = linkList[selection-1]
+            selectedtitle = selectedLink.split("/")
+            filteredtitle = selectedtitle[2].replace("-"," ")
+            print(filteredtitle)
+
+            selectedLink = "https://readcomiconline.to" + selectedLink
+            print(selectedLink)
+
+            #Create connections to database
+            conn = sqlite3.connect("./config/comicDatabase.db")
+            cur = conn.cursor()
+
+            #Get the current list of comics
+
+            selectAllComicsQuery = "SELECT * FROM _comicURLs"
+            cur.execute(selectAllComicsQuery)
+            allComics = cur.fetchall()
+
+            if selectedLink:
+                checkExistsQuery = "SELECT * from _comicURLs where link is " + "'" + selectedLink + "'"
+                cur.execute(checkExistsQuery)
+                exists = cur.fetchall()
+                if exists:
+                    input("Comic already exists in pull list! Press Enter to return to the main menu.")
+                    GlobalFunctions.add_new_comic()
+            else:
+                GlobalFunctions.addRemoveComicMenu()
+            
+            comicFolder = filteredtitle
+            title = selectedtitle[2].replace("-","")
+            insertComic = "INSERT INTO _comicURLs (name, link, folder) VALUES (%s,%s,%s)" % ("'"+title+"'","'"+selectedLink+"'","'"+comicFolder+"'")
+            
+            cur.execute(insertComic)
+            conn.commit()
+            conn.close()
+
+            input("Comic successfully entered into pull list. Press Enter to return to the main menu.")
+            GlobalFunctions.mainMenu()
+        except EnvironmentError as e:
+            print(e)
