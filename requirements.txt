@@ -1,5 +1,5 @@
 PrettyTable>=0.7
-cloudscraper>=1.2.18
+cloudscraper>=1.2.20
 requests>=2.22.0
 beautifulsoup4>=4.8.2
 img2pdf>=0.3.3
