@@ -22,6 +22,7 @@ import getpass
 from zipfile import ZipFile
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
+from termcolor import colored
 
 class GlobalFunctions:
     def cls():
@@ -30,6 +31,19 @@ class GlobalFunctions:
     def mainMenu():
         try:
             GlobalFunctions.cls()
+
+            conn = sqlite3.connect("./config/comicDatabase.db")
+            cur = conn.cursor()
+            rootQuerySQL = "SELECT * FROM _config"
+            cur.execute(rootQuerySQL)
+            rootRows = cur.fetchall()
+
+            for row in rootRows:
+                if row is not None:
+                    continue
+                else:
+                    GlobalFunctions.set_comic_config()
+
             choice = input("""
             ***PLEASE MAKE YOUR SELECTION***
 
@@ -197,7 +211,7 @@ class GlobalFunctions:
     def single_comic_download():
         conn = sqlite3.connect("./config/comicDatabase.db")
         cur = conn.cursor()
-        root_path_query = "SELECT * FROM _config WHERE provider is 'READCOMICSONLINE.RU'"
+        root_path_query = "SELECT * FROM _config"
         cur.execute(root_path_query)
         root_path = cur.fetchall()
         conn.close()
@@ -406,103 +420,55 @@ class GlobalFunctions:
 
             sess = requests.session()
             
+            retries = Retry(total=5, backoff_factor=1)
+            sess.mount('http://', HTTPAdapter(max_retries=retries))
             headers = {
                 'User-Agent':
                     'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-                    'sec-fetch-mode': 'navigate',
-                    'secfetch-user': '?1'
+                'sec-fetch-mode': 'navigate',
+                'secfetch-user': '?1'
             }
+            page = sess.get("https://readcomicsonline.ru/comic-list", headers=headers)
 
-            searchData = input("What comic would you like to search for (Ctrl+C to exit)? ")
-            
-            while not searchData:
-                GlobalFunctions.cls()
-                print("No valid criteria entered.")
-                searchData = input("What comic would you like to search for (Ctrl+C to exit)? ")
-
-            data = {
-                'keyword': "'"+searchData+"'"
-            }
-
-            page = sess.post('https://readcomicsonline.ru/advanced-search', data=data, headers=headers)
-            time.sleep(5)
 
             soup = BeautifulSoup(page.text,"html5lib")
 
-            table = soup.find("table")
+            links = soup.findAll('a')
 
-            for i in range (1,2):
-                try:
-                    findLinks = table.find_all('a') 
-                except EnvironmentError as e:
-                    print(e)
+            findLinks = []
+
+            x = 1
+
+            for link in links:
+                if "comic-list?alpha=" in link.get('href'):
+                    indexLetter = link.get('href').split('=')[1]
+                    findLinks.append([x,indexLetter,link.get('href')])
+                    x = x + 1
 
             # Let's create our table
             searchTable = PrettyTable()
-            searchTable.field_names = ["Number", "Title", "Comic URL"]
+            searchTable.field_names = ["Number", "Section", "Link"]
 
             searchTable.align["Number"] = "l"
-            searchTable.align["Title"] = "l"
-            searchTable.align["Comic URL"] = "l"
+            searchTable.align["Section"] = "l"
+            searchTable.align["Link"] = "l"
 
-            x = 1
-            linkList = []
+            for item in findLinks:
+                searchTable.add_row([item[0],item[1],item[2]])
 
-            for link in findLinks:
-                newLink = link.get('href')
-                title = newLink.split("/")
-                if len(title) == 3:
-                    title = title[2].replace("-"," ")
-                    searchTable.add_row([str(x),title,newLink])
-                    linkList.append(newLink)
-                    x = x+1                    
+            print(searchTable)
 
-            print(searchTable.get_string(fields=["Number","Title"]))
-            selection = int(input("Enter the number for the comic you want to enter: "))
-            print(linkList[selection-1])
-            
-            if selection is None:
-                input("No comic selected. Press Enter to return to the main menu.")
-                GlobalFunctions.mainMenu()
+            selection = input("Enter number for the section you want to browse: ")
 
-            selectedLink = linkList[selection-1]
-            selectedtitle = selectedLink.split("/")
-            filteredtitle = selectedtitle[2].replace("-"," ")
-            print(filteredtitle)
+            for row in findLinks:
+                if row[0] == int(selection):
+                    tagLinks = []
+                    for link in links:
+                        searchHREF = "https://readcomicsonline.ru/comic-list/tag/" + row[1].lower()
+                        if searchHREF in link.get('href'):
+                            print(link.text)
 
-            selectedLink = "https://readcomiconline.to" + selectedLink
-            print(selectedLink)
 
-            #Create connections to database
-            conn = sqlite3.connect("./config/comicDatabase.db")
-            cur = conn.cursor()
-
-            #Get the current list of comics
-
-            selectAllComicsQuery = "SELECT * FROM _comicURLs"
-            cur.execute(selectAllComicsQuery)
-            allComics = cur.fetchall()
-
-            if selectedLink:
-                checkExistsQuery = "SELECT * from _comicURLs where link is " + "'" + selectedLink + "'"
-                cur.execute(checkExistsQuery)
-                exists = cur.fetchall()
-                if exists:
-                    input("Comic already exists in pull list! Press Enter to return to the main menu.")
-                    GlobalFunctions.add_new_comic()
-            else:
-                GlobalFunctions.addRemoveComicMenu()
-            
-            comicFolder = filteredtitle
-            title = selectedtitle[2].replace("-","")
-            insertComic = "INSERT INTO _comicURLs (name, link, folder) VALUES (%s,%s,%s)" % ("'"+title+"'","'"+selectedLink+"'","'"+comicFolder+"'")
-            
-            cur.execute(insertComic)
-            conn.commit()
-            conn.close()
-
-            input("Comic successfully entered into pull list. Press Enter to return to the main menu.")
-            GlobalFunctions.mainMenu()
         except EnvironmentError as e:
             print(e)
 
@@ -527,7 +493,7 @@ class GlobalFunctions:
         time.sleep(2)
         title = title[-1]
         title = title.replace("-","")
-        print("Creating/updating database table for series "+title)
+        print("Checking for new issues of "+title)
         createTable = "CREATE TABLE IF NOT EXISTS " + title + " (name text NOT NULL,link text UNIQUE);"
         try:
             cur.execute(createTable)
@@ -544,7 +510,7 @@ class GlobalFunctions:
                     findLinks.append(link.get('href'))
             except EnvironmentError as e:
                 print(e)
-
+        
         for link in findLinks:
             try:
                 # Create the URL to the issue from the relative link on the page. the '&readType=1' 
@@ -578,7 +544,12 @@ class GlobalFunctions:
                     file_issue_name = file_issue_name[-1]
                     file_issue_name = file_issue_name.split("?")
                     file_issue_name = file_issue_name[0]
-                    file_issue_name = file_issue_name.replace("-"," ")     
+                    file_issue_name = file_issue_name.replace("-"," ")   
+
+                    if len(file_issue_name) == 1:
+                        file_issue_name = "00" + file_issue_name
+                    elif len(file_issue_name) == 2:
+                        file_issue_name = "0" + file_issue_name
 
                     # Set the name for the CBZ file.
                     cbz_name = comicLink.replace("https://readcomicsonline.ru/comic/","").split("/")
@@ -658,3 +629,20 @@ class GlobalFunctions:
 
         conn.commit()
         conn.close()
+
+        completeCheck = soup.body.findAll(text='Complete')
+        
+        if completeCheck:
+                try:                    
+                    print(colored("Comic " + title + " is completed. Removing from database.",'red'))
+                    #Connect to the database,
+                    connDel = sqlite3.connect("./config/comicDatabase.db")
+                    curDel = connDel.cursor()
+                    deleteFromTracker = "DELETE FROM _comicURLs WHERE name = '" + title + "'"
+                    curDel.execute(deleteFromTracker)
+                    connDel.commit()                    
+                except sqlite3.Error as error:
+                    print("Failed to delete record from table", error)
+                finally:
+                    if connDel:
+                        connDel.close()
