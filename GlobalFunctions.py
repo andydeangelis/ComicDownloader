@@ -7,6 +7,7 @@ import cloudscraper
 import requests
 from bs4 import BeautifulSoup
 import os
+from os.path import exists
 import shutil
 import sys
 import logging
