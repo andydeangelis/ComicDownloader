@@ -664,15 +664,21 @@ class GlobalFunctions:
                 cur = conn.cursor()
                 cur.execute(createUrlTable)
                 conn.commit()
+
                 # Create _config table
                 createConfigTable = "CREATE TABLE IF NOT EXISTS _config (comicFolder TEXT, comicVineAPIKey TEXT)"
                 cur.execute(createConfigTable)
                 conn.commit()
+                
                 # Create the default root path config
                 comicPath = '/comics'
                 cvApiKey = input ("""Enter your ComicVine API key): """)
-                insertRootPathProvider = "INSERT INTO _config (comicFolder,comicVineAPIKey) VALUES (%s,%s)" % ("'"+comicPath+"'","'"+cvApiKey+"'")
-                cur.execute(insertRootPathProvider)
+                if cvApiKey == "":
+                    print("No API Key entered. ComicDownloader will not be able to auto-tag downloaded comics.")
+                    input ("Press Enter to continue...")
+                insertConfigData = "INSERT INTO _config (comicFolder,comicVineAPIKey) VALUES (%s,%s)" % ("'"+comicPath+"'","'"+cvApiKey+"'")
+                cur.execute(insertConfigData)
                 conn.commit()
+                
                 #Close database connection
                 conn.close()
