@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from genericpath import isfile
 import os
 import sys
 from GlobalFunctions import GlobalFunctions
@@ -14,4 +15,7 @@ if __name__ == "__main__":
     if args.silent:
         GlobalFunctions.comicDownload()
     else:
-        GlobalFunctions.mainMenu()
+        if os.path.isfile('/data/comicDatabase.db'):
+            GlobalFunctions.mainMenu()
+        else:
+            GlobalFunctions.createNewDatabase()

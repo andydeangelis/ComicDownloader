@@ -21,6 +21,7 @@ import math
 import threading
 from tqdm import tqdm
 import sqlite3
+from sqlite3 import Error
 import time
 import getpass
 from zipfile import ZipFile
@@ -36,7 +37,7 @@ class GlobalFunctions:
         try:
             GlobalFunctions.cls()
 
-            conn = sqlite3.connect("./config/comicDatabase.db")
+            conn = sqlite3.connect("/data/comicDatabase.db")
             cur = conn.cursor()
             rootQuerySQL = "SELECT * FROM _config"
             cur.execute(rootQuerySQL)
@@ -80,7 +81,7 @@ class GlobalFunctions:
         try:
             GlobalFunctions.cls()
             #Create connections to database
-            conn = sqlite3.connect("./config/comicDatabase.db")
+            conn = sqlite3.connect("/data/comicDatabase.db")
             cur = conn.cursor()
 
             #Get the current list of comics
@@ -139,7 +140,7 @@ class GlobalFunctions:
         GlobalFunctions.cls()
 
         #Create connections to database
-        conn = sqlite3.connect("./config/comicDatabase.db")
+        conn = sqlite3.connect("/data/comicDatabase.db")
         cur = conn.cursor()
 
         #Get the current list of comics
@@ -205,7 +206,7 @@ class GlobalFunctions:
     def comicDownload():
         GlobalFunctions.cls()
         #Create connections to database
-        conn = sqlite3.connect("./config/comicDatabase.db")
+        conn = sqlite3.connect("/data/comicDatabase.db")
         cur = conn.cursor()
 
         #Get the current list of comics
@@ -226,7 +227,7 @@ class GlobalFunctions:
             GlobalFunctions.pullComic(row,rootPath)
            
     def single_comic_download(link):
-        conn = sqlite3.connect("./config/comicDatabase.db")
+        conn = sqlite3.connect("/data/comicDatabase.db")
         cur = conn.cursor()
         root_path_query = "SELECT * FROM _config"
         cur.execute(root_path_query)
@@ -360,7 +361,7 @@ class GlobalFunctions:
     def modifySettingsMenu():
         GlobalFunctions.cls()
 
-        conn = sqlite3.connect("./config/comicDatabase.db")
+        conn = sqlite3.connect("/data/comicDatabase.db")
         cur = conn.cursor()
         root_path_query = "SELECT * FROM _config"
         cur.execute(root_path_query)
@@ -398,7 +399,7 @@ class GlobalFunctions:
         GlobalFunctions.cls()
 
         try:
-            conn = sqlite3.connect("./config/comicDatabase.db")
+            conn = sqlite3.connect("/data/comicDatabase.db")
             cur = conn.cursor()
             cur.execute ("SELECT * FROM _config")
             pathConfig = cur.fetchall()
@@ -497,7 +498,7 @@ class GlobalFunctions:
         print("\n" + row[2])
         
         #Create connections to database
-        conn = sqlite3.connect("./config/comicDatabase.db")
+        conn = sqlite3.connect("/data/comicDatabase.db")
         cur = conn.cursor()
 
         sess = requests.session()
@@ -645,3 +646,14 @@ class GlobalFunctions:
         'Unrestricted',
         './comictagger/comictag.ps1 -FileName "',
         comicFile,'"'], cwd=os.getcwd())
+
+    def createNewDatabase():
+        conn = None
+        try:
+            conn = sqlite3.connect('/data/comicDatabase.db')
+            print(sqlite3.version)
+        except Error as e:
+            print(e)
+        finally:
+            if conn:
+                conn.close()
