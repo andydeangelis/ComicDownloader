@@ -412,7 +412,7 @@ class GlobalFunctions:
             pathConfig = cur.fetchall()
             
             if pathConfig:
-                print("Entry for already exists!")
+                print("Entry already exists!")
                 for rootRow in pathConfig:
                     rootPath = rootRow[0]
                 update = input("Would you like to update your comic root path (" + rootPath + ")? (Y/N): ")
@@ -425,6 +425,15 @@ class GlobalFunctions:
                     updateRootPathProvider = "UPDATE _config SET comicFolder = '" + comicPath + "'"
                     cur.execute(updateRootPathProvider)
                     conn.commit()
+            else:
+                comicPath = input("Enter the path to your comic directory: ")
+                while not comicPath:
+                    print("No path selected.")
+                    comicPath = input("Enter the path to your comic directory: ")
+                comicPath = comicPath.replace("\\","/")
+                updateRootPathProvider = "INSERT INTO _config (comicFolder) VALUES (%s)" % ("'"+comicPath+"'")
+                cur.execute(updateRootPathProvider)
+                conn.commit()
 
             conn.commit()
             conn.close()
@@ -455,6 +464,12 @@ class GlobalFunctions:
                     updateRootPathProvider = "UPDATE _config SET comicVineApiKey = '" + apiKey + "'"
                     cur.execute(updateRootPathProvider)
                     conn.commit()
+                else:
+                    apiKey = input("Enter your new ComicVine API key: ")
+                    if apiKey == "":
+                        print("No API Key entered. ComicDownloader will not be able to auto-tag downloaded comics.")
+                        input ("Press Enter to continue...")
+                    updateRootPathProvider = "INSERT INTO _config (comicVineApiKey) VALUES (%s)" % ("'"+apiKey+"'")
             
             conn.commit()
             conn.close()
