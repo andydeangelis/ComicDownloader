@@ -222,11 +222,10 @@ class GlobalFunctions:
         conn.close()
 
         for rootRow in root_path:
-            rootPath = rootRow[0][0]
-            apiKey = rootRow[0][1]
+            rootPath = rootRow[0]            
 
         for row in tqdm(allComics):
-            GlobalFunctions.pullComic(row,rootPath,apiKey)
+            GlobalFunctions.pullComic(row,rootPath)
            
     def single_comic_download(link):
         conn = sqlite3.connect("/data/comicDatabase.db")
@@ -521,8 +520,10 @@ class GlobalFunctions:
         except EnvironmentError as e:
             print(e)
 
-    def pullComic(row,rootPath,apiKey):
+    def pullComic(row,rootPath):
         print("\n" + row[2])
+        print("\n" + rootPath[0])
+        print("\n" + rootPath[1])
         
         #Create connections to database
         conn = sqlite3.connect("/data/comicDatabase.db")
@@ -609,8 +610,8 @@ class GlobalFunctions:
                     # Specify the paths. The 'tmpPath' is the issue sub-directory in the comic directory
                     # where the jpegs for the issue will be stored. The 'comicPath' is the top level folder
                     # where the resulting CBZ file will be stored.
-                    tmpPath = rootPath + "/" + row[2] + "/" + file_issue_name     
-                    comic_path = rootPath + "/" + row[2] + "/"    
+                    tmpPath = rootPath[0] + "/" + row[2] + "/" + file_issue_name     
+                    comic_path = rootPath[0] + "/" + row[2] + "/"    
 
                     # Check if the directory exists. If not, create it.
                     if os.path.isdir(tmpPath):
@@ -656,8 +657,9 @@ class GlobalFunctions:
                     os.rmdir(tmpPath)
 
                     fullComicPath = comic_path + cbz_name + ".cbz"
-                    if apiKey != "":
-                        GlobalFunctions.generateMetadata(fullComicPath,apiKey)
+                    
+                    if rootPath[1] != "":
+                        GlobalFunctions.generateMetadata(fullComicPath,rootPath[1])
 
                     # Commit the change to the database.
                     conn.commit() 
