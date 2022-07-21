@@ -665,5 +665,10 @@ class GlobalFunctions:
                 createConfigTable = "CREATE TABLE IF NOT EXISTS _config (comicFolder TEXT)"
                 cur.execute(createConfigTable)
                 conn.commit()
+                # Create the default root path config
+                comicPath = '/comics'
+                insertRootPathProvider = "INSERT INTO _config (comicFolder) VALUES (%s)" % ("'"+comicPath+"'")
+                cur.execute(insertRootPathProvider)
+                conn.commit()
                 #Close database connection
                 conn.close()
