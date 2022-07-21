@@ -656,10 +656,14 @@ class GlobalFunctions:
             print(e)
         finally:
             if conn:
+                # Create _comicURLs table
                 createUrlTable = "CREATE TABLE IF NOT EXISTS _comicURLs (name text NOT NULL, link text UNIQUE, folder TEXT, tracked TEXT)"
-                createConfigTable = "CREATE TABLE _config (comicFolder TEXT)"
                 cur = conn.cursor()
                 cur.execute(createUrlTable)
+                conn.commit()
+                # Create _config table
+                createConfigTable = "CREATE TABLE IF NOT EXISTS _config (comicFolder TEXT)"
                 cur.execute(createConfigTable)
                 conn.commit()
+                #Close database connection
                 conn.close()
