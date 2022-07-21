@@ -523,7 +523,6 @@ class GlobalFunctions:
 
     def pullComic(row,rootPath,apiKey):
         print("\n" + row[2])
-        print("\n" + rootPath)
         
         #Create connections to database
         conn = sqlite3.connect("/data/comicDatabase.db")
