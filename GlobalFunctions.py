@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from ast import Global
 from prettytable import PrettyTable
 import re
 import time
@@ -389,6 +390,8 @@ class GlobalFunctions:
 
         if choice == "1":
             GlobalFunctions.set_comic_config()
+        elif choice == '2':
+            GlobalFunctions.set_api_key()
         elif choice=="0":
             sys.exit
         elif choice == "M" or choice == "m":
@@ -421,17 +424,37 @@ class GlobalFunctions:
                     updateRootPathProvider = "UPDATE _config SET comicFolder = '" + comicPath + "'"
                     cur.execute(updateRootPathProvider)
                     conn.commit()
-            else:
-                print("Configuration does not exist.")
-                comicPath = input("Enter the path to your comic directory: ")
-                while not comicPath:
-                    print("No path selected.")
-                    comicPath = input("Enter the path to your comic directory: ")
-                comicPath = comicPath.replace("\\","/")
-                insertRootPathProvider = "INSERT INTO _config (comicFolder) VALUES (%s)" % ("'"+comicPath+"'")
-                cur.execute(insertRootPathProvider)
-                conn.commit()
 
+            conn.commit()
+            conn.close()
+
+            GlobalFunctions.modifySettingsMenu()
+        except EnvironmentError:
+            GlobalFunctions.modifySettingsMenu()
+
+    def set_api_key():
+        GlobalFunctions.cls()
+
+        try:
+            conn = sqlite3.connect("/data/comicDatabase.db")
+            cur = conn.cursor()
+            cur.execute ("SELECT * FROM _config")
+            pathConfig = cur.fetchall()
+            
+            if pathConfig:
+                print("Entry for already exists!")
+                for rootRow in pathConfig:
+                    rootPath = rootRow[0][1]
+                update = input("Would you like to update your ComicVine API Key (" + rootPath + ")? (Y/N): ")
+                if update == "Y" or update == "y":
+                    apiKey = input("Enter your new ComicVine API key: ")
+                    if apiKey == "":
+                        print("No API Key entered. ComicDownloader will not be able to auto-tag downloaded comics.")
+                        input ("Press Enter to continue...")
+                    updateRootPathProvider = "UPDATE _config SET comicVineApiKey = '" + apiKey + "'"
+                    cur.execute(updateRootPathProvider)
+                    conn.commit()
+            
             conn.commit()
             conn.close()
 
