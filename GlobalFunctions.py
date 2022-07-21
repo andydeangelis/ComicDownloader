@@ -370,13 +370,16 @@ class GlobalFunctions:
         
         if not root_path:
             rootPath = 'ROOT PATH NOT SET'
+            APIKey = 'API KEY NOT SET'
         else:
             rootPath = root_path[0][0]
+            APIKey = root_path[0][1]            
 
         choice = input("""
         ***PLEASE MAKE YOUR SELECTION***
 
         1: Set path to save Comics (Current: """ + rootPath + """)
+        2: Set ComicVine API key (Current: """ + APIKey + """)
 
         0: Quit
 
