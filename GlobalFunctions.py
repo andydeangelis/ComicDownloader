@@ -222,10 +222,11 @@ class GlobalFunctions:
         conn.close()
 
         for rootRow in root_path:
-            rootPath = rootRow[0]
+            rootPath = rootRow[0][0]
+            apiKey = rootRow[0][1]
 
         for row in tqdm(allComics):
-            GlobalFunctions.pullComic(row,rootPath)
+            GlobalFunctions.pullComic(row,rootPath,apiKey)
            
     def single_comic_download(link):
         conn = sqlite3.connect("/data/comicDatabase.db")
@@ -520,7 +521,7 @@ class GlobalFunctions:
         except EnvironmentError as e:
             print(e)
 
-    def pullComic(row,rootPath):
+    def pullComic(row,rootPath,apiKey):
         print("\n" + row[2])
         
         #Create connections to database
@@ -655,7 +656,8 @@ class GlobalFunctions:
                     os.rmdir(tmpPath)
 
                     fullComicPath = comic_path + cbz_name + ".cbz"
-                    #GlobalFunctions.generateMetadata(fullComicPath)
+                    if apiKey != "":
+                        GlobalFunctions.generateMetadata(fullComicPath,apiKey)
 
                     # Commit the change to the database.
                     conn.commit() 
@@ -666,12 +668,8 @@ class GlobalFunctions:
         conn.commit()
         conn.close()
 
-    def generateMetadata(comicFile):
-        subprocess.Popen([r'C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe',
-        '-ExecutionPolicy',
-        'Unrestricted',
-        './comictagger/comictag.ps1 -FileName "',
-        comicFile,'"'], cwd=os.getcwd())
+    def generateMetadata(comicFile,apiKey):
+        subprocess.Popen([r'comictagger','--cv-api-key', apiKey, '-f', comicFile, '-o', '-s', '-t', 'CR', '-w']
 
     def createNewDatabase():
         conn = None
