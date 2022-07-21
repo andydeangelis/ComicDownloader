@@ -658,7 +658,7 @@ class GlobalFunctions:
 
                     fullComicPath = comic_path + cbz_name + ".cbz"
                     
-                    #GlobalFunctions.generateMetadata(fullComicPath,apiKey)
+                    GlobalFunctions.generateMetadata(fullComicPath,apiKey)
 
                     # Commit the change to the database.
                     conn.commit() 
