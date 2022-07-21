@@ -27,4 +27,4 @@ RUN cd /comictagger && python setup.py install
 # Clean Up
 RUN apt-get autoremove -y
 
-ENTRYPOINT ["comictagger", "-h"]
+ENTRYPOINT ["python", "/ComicDownloader/__main__.py"]

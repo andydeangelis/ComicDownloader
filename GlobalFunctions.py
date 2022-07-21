@@ -662,12 +662,13 @@ class GlobalFunctions:
                 cur.execute(createUrlTable)
                 conn.commit()
                 # Create _config table
-                createConfigTable = "CREATE TABLE IF NOT EXISTS _config (comicFolder TEXT)"
+                createConfigTable = "CREATE TABLE IF NOT EXISTS _config (comicFolder TEXT, comicVineAPIKey TEXT)"
                 cur.execute(createConfigTable)
                 conn.commit()
                 # Create the default root path config
                 comicPath = '/comics'
-                insertRootPathProvider = "INSERT INTO _config (comicFolder) VALUES (%s)" % ("'"+comicPath+"'")
+                cvApiKey = input ("""Enter your ComicVine API key): """)
+                insertRootPathProvider = "INSERT INTO _config (comicFolder,comicVineAPIKey) VALUES (%s,%s)" % ("'"+comicPath+"'","'"+cvApiKey+"'")
                 cur.execute(insertRootPathProvider)
                 conn.commit()
                 #Close database connection
