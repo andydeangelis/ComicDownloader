@@ -19,3 +19,4 @@ if __name__ == "__main__":
             GlobalFunctions.mainMenu()
         else:
             GlobalFunctions.createNewDatabase()
+            GlobalFunctions.mainMenu()

@@ -1,5 +1,4 @@
 FROM alpine:latest
-MAINTAINER andy d.
 RUN apk add --no-cache git
 # Install python/pip
 ENV PYTHONUNBUFFERED=1
@@ -11,4 +10,4 @@ RUN mkdir /data
 RUN cd / && git clone 'https://github.com/andydeangelis/ComicDownloader.git'
 RUN cd /ComicDownloader && git switch comicdownloader-dev
 RUN pip3 install -r /ComicDownloader/requirements.txt
-ENTRYPOINT ["python3", "/repos/ComicDownloader/__main__.py"]
+ENTRYPOINT ["python3", "/ComicDownloader/__main__.py"]
