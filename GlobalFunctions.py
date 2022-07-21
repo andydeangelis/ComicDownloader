@@ -526,7 +526,7 @@ class GlobalFunctions:
         print("\n" + rootPath)
         
         #Create connections to database
-        conn = sqlite3.connect("./config/comicDatabase.db")
+        conn = sqlite3.connect("/data/comicDatabase.db")
         cur = conn.cursor()
 
         sess = requests.session()
