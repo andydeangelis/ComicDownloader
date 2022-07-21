@@ -629,7 +629,7 @@ class GlobalFunctions:
                     os.rmdir(tmpPath)
 
                     fullComicPath = comic_path + cbz_name + ".cbz"
-                    GlobalFunctions.generateMetadata(fullComicPath)
+                    #GlobalFunctions.generateMetadata(fullComicPath)
 
                     # Commit the change to the database.
                     conn.commit() 
