@@ -526,6 +526,9 @@ class GlobalFunctions:
         print("\n" + rootPath)
         
         #Create connections to database
+        conn = sqlite3.connect("./config/comicDatabase.db")
+        cur = conn.cursor()
+
         sess = requests.session()
         retries = Retry(total=5, backoff_factor=1)
         sess.mount('http://', HTTPAdapter(max_retries=retries))
