@@ -525,7 +525,8 @@ class GlobalFunctions:
         print("\n" + row[2])
         print("\n" + rootPath)
         
-        #Create connections to databaseselectAllComicsQuery = "SELECT * FROM _comicURLs"
+        #Create connections to database
+        sess = requests.session()
         retries = Retry(total=5, backoff_factor=1)
         sess.mount('http://', HTTPAdapter(max_retries=retries))
         headers = {
