@@ -14,4 +14,9 @@ RUN pip3 install -r /ComicDownloader/requirements.txt
 # Create empty directory to mount comic library
 RUN mkdir /comics
 
+# Clone and build comictagger
+RUN cd / && git clone 'https://github.com/comictagger/comictagger.git'
+RUN cd /comictagger && git switch develop && pip3 install -r requirements_dev.txt
+RUN cd /comictagger && python3 setup.py install
+
 ENTRYPOINT ["python3", "/ComicDownloader/__main__.py"]
