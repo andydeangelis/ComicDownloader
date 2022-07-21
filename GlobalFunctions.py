@@ -222,10 +222,11 @@ class GlobalFunctions:
         conn.close()
 
         for rootRow in root_path:
-            rootPath = rootRow[0]            
+            rootPath = rootRow[0]
+            apiKey = rootRow[1]            
 
         for row in tqdm(allComics):
-            GlobalFunctions.pullComic(row,rootPath)
+            GlobalFunctions.pullComic(row,rootPath,apiKey)
            
     def single_comic_download(link):
         conn = sqlite3.connect("/data/comicDatabase.db")
@@ -520,15 +521,11 @@ class GlobalFunctions:
         except EnvironmentError as e:
             print(e)
 
-    def pullComic(row,rootPath):
+    def pullComic(row,rootPath,apiKey):
         print("\n" + row[2])
         print("\n" + rootPath)
         
-        #Create connections to database
-        conn = sqlite3.connect("/data/comicDatabase.db")
-        cur = conn.cursor()
-
-        sess = requests.session()
+        #Create connections to databaseselectAllComicsQuery = "SELECT * FROM _comicURLs"
         retries = Retry(total=5, backoff_factor=1)
         sess.mount('http://', HTTPAdapter(max_retries=retries))
         headers = {
@@ -657,7 +654,7 @@ class GlobalFunctions:
 
                     fullComicPath = comic_path + cbz_name + ".cbz"
                     
-                    #GlobalFunctions.generateMetadata(fullComicPath,rootPath[1])
+                    #GlobalFunctions.generateMetadata(fullComicPath,apiKey)
 
                     # Commit the change to the database.
                     conn.commit() 
