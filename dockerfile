@@ -21,4 +21,4 @@ RUN apt-get update && apt-get -y upgrade \
     # Clean Up
     && apt-get autoremove -y
 
-ENTRYPOINT ["python", "/ComicDownloader/__main__.py"]
+ENTRYPOINT ["python", "/ComicDownloader/__flasktest__.py"]
