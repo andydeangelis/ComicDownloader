@@ -17,7 +17,8 @@ RUN apt-get update && apt-get -y upgrade \
     && cd /comictagger && git switch develop \
     && pip3 install -r /comictagger/requirements_dev.txt \
     && cd /comictagger && python setup.py install \
+    && pip3 install flask \
     # Clean Up
     && apt-get autoremove -y
 
-ENTRYPOINT ["python", "/ComicDownloader/__main__.py"]
+ENTRYPOINT ["python", "/ComicDownloader/__flasktest__.py"]
