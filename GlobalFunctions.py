@@ -111,12 +111,15 @@ class GlobalFunctions:
                     if exists[0][3] == 1:
                         print("Comic already exists in pull list!")
                         input("Press Enter to return to main menu...")
+                        conn.close()
                         GlobalFunctions.mainMenu()
                     else:
                         trackerExistQuery = input ("Comic exists in list but is not being tracked. Start tracking now? (Y/N) ")
                         if trackerExistQuery == 'y' or trackerExistQuery == 'Y':
                             updateTrackerQuery = "UPDATE _comicURLs SET tracked = 1 where link is " + "'" + newComic + "'"
-                            cur.execute(updateTrackerQuery)            
+                            cur.execute(updateTrackerQuery) 
+                            conn.commit()
+                            conn.close()           
                 else:
                     title = (newComic.split("/"))
                     title = title[-1]
