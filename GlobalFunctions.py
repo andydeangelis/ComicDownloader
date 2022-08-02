@@ -56,7 +56,7 @@ class GlobalFunctions:
             1: Run batch downloader
             2: Add/Remove Comics
             
-            0: Quit
+            Q: Quit
 
             S: Modify Settings
 
@@ -66,7 +66,7 @@ class GlobalFunctions:
                 GlobalFunctions.comicDownload()
             elif choice == "2":
                 GlobalFunctions.addRemoveComicMenu()
-            elif choice=="0":
+            elif choice=="Q" or cjoice=="q":
                 GlobalFunctions.cls()
                 sys.exit
             elif choice == "S" or choice == "s":
@@ -190,7 +190,7 @@ class GlobalFunctions:
         3: Download Single Comic or Series without tracking
         4: Search for Comics
 
-        0: Quit
+        Q: Quit
 
         M: Main Menu
 
@@ -206,7 +206,7 @@ class GlobalFunctions:
             GlobalFunctions.add_new_comic(track)
         elif choice == "4":
             GlobalFunctions.comicSearch()
-        elif choice=="0":
+        elif choice=="Q" or choice=="q":
             GlobalFunctions.cls()
             sys.exit
         elif choice == "M" or choice == "m":
@@ -395,7 +395,7 @@ class GlobalFunctions:
         1: Set path to save Comics (Current: """ + rootPath + """)
         2: Set ComicVine API key (Current: """ + APIKey + """)
 
-        0: Quit
+        Q: Quit
 
         M: Main Menu
 
@@ -405,7 +405,7 @@ class GlobalFunctions:
             GlobalFunctions.set_comic_config()
         elif choice == '2':
             GlobalFunctions.set_api_key()
-        elif choice=="0":
+        elif choice=="Q" or choice=="q":
             sys.exit
         elif choice == "M" or choice == "m":
             GlobalFunctions.mainMenu()
