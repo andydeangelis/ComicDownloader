@@ -109,7 +109,7 @@ class GlobalFunctions:
                     cur.execute(checkExistsQuery)
                     exists = cur.fetchall()
                     if exists:                        
-                        if exists[0][1] == 1:
+                        if exists[0][3] == 1:
                             print("Comic already exists in pull list!")
                             input("Press Enter to return to main menu...")
                             conn.close()
