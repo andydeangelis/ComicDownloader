@@ -66,7 +66,7 @@ class GlobalFunctions:
                 GlobalFunctions.comicDownload()
             elif choice == "2":
                 GlobalFunctions.addRemoveComicMenu()
-            elif choice=="Q" or cjoice=="q":
+            elif choice=="Q" or choice=="q":
                 GlobalFunctions.cls()
                 sys.exit
             elif choice == "S" or choice == "s":
