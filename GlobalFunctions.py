@@ -124,9 +124,9 @@ class GlobalFunctions:
             title = title.replace("-","")
             
             if track == 'true':
-                insertComic = "INSERT INTO _comicURLs (name, link, folder, tracked) VALUES (%s,%s,%s,%s)" % ("'"+title+"'","'"+newComic+"'","'"+comicFolder+"'",'true')
+                insertComic = "INSERT INTO _comicURLs (name, link, folder, tracked) VALUES (%s,%s,%s,%s)" % ("'"+title+"'","'"+newComic+"'","'"+comicFolder+"'",'1')
             else:
-                insertComic = "INSERT INTO _comicURLs (name, link, folder, tracked) VALUES (%s,%s,%s,%s)" % ("'"+title+"'","'"+newComic+"'","'"+comicFolder+"'",'false')
+                insertComic = "INSERT INTO _comicURLs (name, link, folder, tracked) VALUES (%s,%s,%s,%s)" % ("'"+title+"'","'"+newComic+"'","'"+comicFolder+"'",'0')
                 GlobalFunctions.single_comic_download(newComic)
 
             cur.execute(insertComic)
@@ -159,7 +159,7 @@ class GlobalFunctions:
         try:
             comicToRemove = (int(input ("Enter number of comic to remove from queue (this will not remove history): ")))
             removeComic = comicList[(comicToRemove - 1)][1]
-            dropComicSql = "UPDATE _comicURLs SET tracked = 'false' WHERE link is " + "'" + removeComic + "'"
+            dropComicSql = "UPDATE _comicURLs SET tracked = 0 WHERE link is " + "'" + removeComic + "'"
             cur.execute(dropComicSql)
             conn.commit()
             GlobalFunctions.addRemoveComicMenu()
