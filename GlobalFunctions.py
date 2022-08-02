@@ -145,7 +145,7 @@ class GlobalFunctions:
         cur = conn.cursor()
 
         #Get the current list of comics
-        comicListQuery = 'SELECT * from _comicURLs WHERE tracked = 1'
+        comicListQuery = 'SELECT * from _comicURLs'
         cur.execute(comicListQuery)
         comicList = cur.fetchall()
 
