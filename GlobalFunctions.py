@@ -109,8 +109,9 @@ class GlobalFunctions:
                     cur.execute(checkExistsQuery)
                     exists = cur.fetchall()
                     if exists:
-                        print("Comic already exists in pull list!")
-                        GlobalFunctions.addRemoveComicMenu()
+                        if exists[3] == 1:
+                            print("Comic already exists in pull list!")
+                            GlobalFunctions.addRemoveComicMenu()
             else:
                 GlobalFunctions.addRemoveComicMenu()
             
