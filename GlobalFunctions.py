@@ -87,7 +87,7 @@ class GlobalFunctions:
 
             #Get the current list of comics
 
-            selectAllComicsQuery = 'SELECT * FROM _comicURLs'
+            selectAllComicsQuery = 'SELECT * FROM _comicURLs WHERE tracked == 1'
             cur.execute(selectAllComicsQuery)
             allComics = cur.fetchall()
 
@@ -145,7 +145,7 @@ class GlobalFunctions:
         cur = conn.cursor()
 
         #Get the current list of comics
-        comicListQuery = 'SELECT * from _comicURLs'
+        comicListQuery = 'SELECT * from _comicURLs WHERE tracked == 1'
         cur.execute(comicListQuery)
         comicList = cur.fetchall()
 
@@ -212,7 +212,7 @@ class GlobalFunctions:
 
         #Get the current list of comics
 
-        selectAllComicsQuery = "SELECT * FROM _comicURLs"
+        selectAllComicsQuery = "SELECT * FROM _comicURLs WHERE tracked == 1"
         cur.execute(selectAllComicsQuery)
         allComics = cur.fetchall()
 
