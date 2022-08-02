@@ -104,48 +104,44 @@ class GlobalFunctions:
             newComic = input ("""Enter URL for new comic (Leave blank and press Enter to return to menu): """)
             
             if newComic:
-                if track == 'true':
-                    checkExistsQuery = "SELECT * from _comicURLs where link is " + "'" + newComic + "'"
-                    cur.execute(checkExistsQuery)
-                    exists = cur.fetchall()
-                    if exists:                        
-                        if exists[0][3] == 1:
-                            print("Comic already exists in pull list!")
-                            input("Press Enter to return to main menu...")
-                            GlobalFunctions.mainMenu()
-                        else:
-                            trackerExistQuery = input ("Comic exists in list but is not being tracked. Start tracking now? (Y/N) ")
-                            if trackerExistQuery == 'y' or trackerExistQuery == 'Y':
-                                updateTrackerQuery = "UPDATE _comicURLs SET tracked = 1 where link is " + "'" + newComic + "'"
-                                cur.execute(updateTrackerQuery)
-                                
-                        conn.commit()
-                        conn.close()
+                checkExistsQuery = "SELECT * from _comicURLs where link is " + "'" + newComic + "'"
+                cur.execute(checkExistsQuery)
+                exists = cur.fetchall()
+                if exists:                        
+                    if exists[0][3] == 1:
+                        print("Comic already exists in pull list!")
+                        input("Press Enter to return to main menu...")
+                        GlobalFunctions.mainMenu()
+                    else:
+                        trackerExistQuery = input ("Comic exists in list but is not being tracked. Start tracking now? (Y/N) ")
+                        if trackerExistQuery == 'y' or trackerExistQuery == 'Y':
+                            updateTrackerQuery = "UPDATE _comicURLs SET tracked = 1 where link is " + "'" + newComic + "'"
+                            cur.execute(updateTrackerQuery)            
+                else:
+                    title = (newComic.split("/"))
+                    title = title[-1]
+                    
+                    comicFolder = title.replace("-"," ")
+                    if comicFolder[comicFolder.__len__() -1] == ' ':
+                        comicFolder = comicFolder[:-1]
+
+                    title = title.replace("-","")
+                    
+                    if track == 'true':
+                        insertComic = "INSERT INTO _comicURLs (name, link, folder, tracked) VALUES (%s,%s,%s,%s)" % ("'"+title+"'","'"+newComic+"'","'"+comicFolder+"'",'1')
+                    else:
+                        insertComic = "INSERT INTO _comicURLs (name, link, folder, tracked) VALUES (%s,%s,%s,%s)" % ("'"+title+"'","'"+newComic+"'","'"+comicFolder+"'",'0')
+                        GlobalFunctions.single_comic_download(newComic)
+
+                    cur.execute(insertComic)
+                    conn.commit()
+                    conn.close()                        
             else:
                 print("No value entered!")
                 input("Press Enter to return to main menu...")
                 conn.close()
                 GlobalFunctions.mainMenu()
             
-            title = (newComic.split("/"))
-            title = title[-1]
-            
-            comicFolder = title.replace("-"," ")
-            if comicFolder[comicFolder.__len__() -1] == ' ':
-                comicFolder = comicFolder[:-1]
-
-            title = title.replace("-","")
-            
-            if track == 'true':
-                insertComic = "INSERT INTO _comicURLs (name, link, folder, tracked) VALUES (%s,%s,%s,%s)" % ("'"+title+"'","'"+newComic+"'","'"+comicFolder+"'",'1')
-            else:
-                insertComic = "INSERT INTO _comicURLs (name, link, folder, tracked) VALUES (%s,%s,%s,%s)" % ("'"+title+"'","'"+newComic+"'","'"+comicFolder+"'",'0')
-                GlobalFunctions.single_comic_download(newComic)
-
-            cur.execute(insertComic)
-            conn.commit()
-            conn.close()
-
             GlobalFunctions.addRemoveComicMenu()
         except EnvironmentError:
             print(EnvironmentError)
