@@ -87,7 +87,7 @@ class GlobalFunctions:
 
             #Get the current list of comics
 
-            selectAllComicsQuery = 'SELECT * FROM _comicURLs WHERE'
+            selectAllComicsQuery = 'SELECT * FROM _comicURLs'
             cur.execute(selectAllComicsQuery)
             allComics = cur.fetchall()
 
