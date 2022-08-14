@@ -685,7 +685,7 @@ class GlobalFunctions:
         conn.close()
 
     def generateMetadata(comicFile,apiKey):
-        subprocess.Popen([r'comictagger','--cv-api-key', apiKey, '-f', comicFile, '-o', '-s', '-t', 'CR', '-w'], cwd=os.getcwd())
+        subprocess.Popen([r'comictagger','--cv-api-key', apiKey, '-f', comicFile, '--no-overwrite', '-o', '-s', '-t', 'CR', '-w'], cwd=os.getcwd())
     
     def getAllComicFiles():
         #Create connections to database
@@ -712,7 +712,8 @@ class GlobalFunctions:
         for root, dirs, files in os.walk(path):
             for file in files:
                 if(file.endswith(".cbz")):
-                    print(os.path.join(root,file))
+                    comicFile = os.path.join(root,file)
+                    print(comicFile)
 
     def createNewDatabase():
         conn = None
