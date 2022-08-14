@@ -707,16 +707,12 @@ class GlobalFunctions:
             rootPath = rootRow[0]
             apiKey = rootRow[1]   
 
-        files = []
+        path = rootPath
 
-        while len(rootPath) > 0:
-            for (dirpath, dirnames, filenames) in os.walk(rootPath.pop()):
-                rootPath.extend(dirnames)
-                files.extend(map(lambda n: os.path.join(*n), zip([dirpath] * len(filenames), filenames)))
-
-        print(apiKey)
-        print(rootPath)
-        print(files)
+        for root, dirs, files in os.walk(path):
+            for file in files:
+                if(file.endswith(".cbz")):
+                    print(os.path.join(root,file))
 
     def createNewDatabase():
         conn = None
