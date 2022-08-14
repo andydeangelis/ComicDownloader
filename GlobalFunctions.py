@@ -55,6 +55,8 @@ class GlobalFunctions:
 
             1: Run batch downloader
             2: Add/Remove Comics
+
+            M: Update all comic Metadata
             
             Q: Quit
 
@@ -66,6 +68,8 @@ class GlobalFunctions:
                 GlobalFunctions.comicDownload()
             elif choice == "2":
                 GlobalFunctions.addRemoveComicMenu()
+            elif choice == "M" or choice =="m":
+                GlobalFunctions.getAllC0micFiles()
             elif choice=="Q" or choice=="q":
                 GlobalFunctions.cls()
                 sys.exit
@@ -682,6 +686,37 @@ class GlobalFunctions:
 
     def generateMetadata(comicFile,apiKey):
         subprocess.Popen([r'comictagger','--cv-api-key', apiKey, '-f', comicFile, '-o', '-s', '-t', 'CR', '-w'], cwd=os.getcwd())
+    
+    def getAllComicFiles():
+        #Create connections to database
+        conn = sqlite3.connect("/data/comicDatabase.db")
+        cur = conn.cursor()
+
+        #Get the current list of comics
+
+        selectAllComicsQuery = "SELECT * FROM _comicURLs WHERE tracked == 1"
+        cur.execute(selectAllComicsQuery)
+        allComics = cur.fetchall()
+
+        root_path_query = "SELECT * FROM _config"
+        cur.execute(root_path_query)
+        root_path = cur.fetchall()
+        conn.close()
+
+        for rootRow in root_path:
+            rootPath = rootRow[0]
+            apiKey = rootRow[1]   
+
+        files = []
+
+        dirlist = ['/home/sethblack/Programming/Python/recursive-list/files/']
+
+        while len(dirlist) > 0:
+            for (dirpath, dirnames, filenames) in os.walk(dirlist.pop()):
+                dirlist.extend(dirnames)
+                files.extend(map(lambda n: os.path.join(*n), zip([dirpath] * len(filenames), filenames)))
+
+        print(files)
 
     def createNewDatabase():
         conn = None
