@@ -714,6 +714,7 @@ class GlobalFunctions:
                 if(file.endswith(".cbz")):
                     comicFile = os.path.join(root,file)
                     print(comicFile)
+                    GlobalFunctions.generateMetadata(comicFile,apiKey)
         
         GlobalFunctions.mainMenu()
 
