@@ -709,13 +709,13 @@ class GlobalFunctions:
 
         files = []
 
-        dirlist = ['/home/sethblack/Programming/Python/recursive-list/files/']
-
-        while len(dirlist) > 0:
-            for (dirpath, dirnames, filenames) in os.walk(dirlist.pop()):
-                dirlist.extend(dirnames)
+        while len(rootPath) > 0:
+            for (dirpath, dirnames, filenames) in os.walk(rootPath.pop()):
+                rootPath.extend(dirnames)
                 files.extend(map(lambda n: os.path.join(*n), zip([dirpath] * len(filenames), filenames)))
 
+        print(apiKey)
+        print(rootPath)
         print(files)
 
     def createNewDatabase():
