@@ -69,7 +69,7 @@ class GlobalFunctions:
             elif choice == "2":
                 GlobalFunctions.addRemoveComicMenu()
             elif choice == "M" or choice =="m":
-                GlobalFunctions.getAllComicFiles()
+                GlobalFunctions.scanComicMetadata()
             elif choice=="Q" or choice=="q":
                 GlobalFunctions.cls()
                 sys.exit
@@ -687,7 +687,7 @@ class GlobalFunctions:
     def generateMetadata(comicFile,apiKey):
         subprocess.Popen([r'comictagger','--cv-api-key', apiKey, '-f', comicFile, '--no-overwrite', '-o', '-s', '-t', 'CR', '-w'], cwd=os.getcwd())
     
-    def getAllComicFiles():
+    def scanComicMetadata():
         #Create connections to database
         conn = sqlite3.connect("/data/comicDatabase.db")
         cur = conn.cursor()
