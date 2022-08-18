@@ -715,7 +715,7 @@ class GlobalFunctions:
                     comicFile = os.path.join(root,file)
                     zip_file = ZipFile(comicFile,'r')
                     if 'ComicInfo.xml' not in zip_file.namelist():
-                        print("Gathering metadata for " + comicFile + " ...")
+                        print("Attempting to gather metadata for " + comicFile + " ...")
                         GlobalFunctions.generateMetadata(comicFile,apiKey)
         
         #GlobalFunctions.mainMenu()
