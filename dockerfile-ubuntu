@@ -1,7 +1,6 @@
 FROM ubuntu:latest
 ENV PYTHONUNBUFFERED=1
-RUN apt-get update && apt-get -y upgrade \
-    # Install python/pip
+RUN apt-get update \
     && apt-get install -y git python3 python3-pip python-is-python3 \
     && apt-get install -y libglib2.0-0 libsm6 libxrender1 libxext6 libgl1 \
     # Make directory to be used for database
@@ -17,8 +16,6 @@ RUN apt-get update && apt-get -y upgrade \
     && cd / && git clone 'https://github.com/comictagger/comictagger.git' \
     && cd /comictagger && git switch develop \
     && pip3 install -r /comictagger/requirements_dev.txt \
-    && cd /comictagger && python setup.py install \
-    # Clean Up
-    && apt-get autoremove -y
+    && cd /comictagger && python setup.py install
 
 ENTRYPOINT ["python", "/ComicDownloader/__main__.py"]

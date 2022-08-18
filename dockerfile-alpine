@@ -1,11 +1,10 @@
 FROM alpine:latest
 ENV PYTHONUNBUFFERED=1
-RUN apt-get update && apt-get -y upgrade \
-    # Install python/pip
-    && apt-get install -y git python3 python3-pip python-is-python3 \
-    && apt-get install -y libglib2.0-0 libsm6 libxrender1 libxext6 libgl1 \
-    # Make directory to be used for database
-    && mkdir /data \
+RUN apk add --update --no-cache git python3 && ln -sf python3 /usr/bin/python
+RUN python3 -m ensurepip
+RUN pip3 install --no-cache --upgrade pip setuptools
+
+RUN mkdir /data \
     # Clone the repo and install requirements
     && cd / && git clone 'https://github.com/andydeangelis/ComicDownloader.git' \
     # Switching to dev branch here
@@ -17,8 +16,6 @@ RUN apt-get update && apt-get -y upgrade \
     && cd / && git clone 'https://github.com/comictagger/comictagger.git' \
     && cd /comictagger && git switch develop \
     && pip3 install -r /comictagger/requirements_dev.txt \
-    && cd /comictagger && python setup.py install \
-    # Clean Up
-    && apt-get autoremove -y
+    && cd /comictagger && python setup.py install
 
-ENTRYPOINT ["python", "/ComicDownloader/__main__.py"]
+ENTRYPOINT ["python3", "/ComicDownloader/__main__.py"]
