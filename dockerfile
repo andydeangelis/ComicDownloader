@@ -2,7 +2,7 @@ FROM ubuntu:latest
 ENV PYTHONUNBUFFERED=1
 RUN apt-get update && apt-get -y upgrade \
     # Install python/pip
-    && apt-get install -y git python3 python3-pip python-is-python3 \
+    && apt-get install -y git python3 python3-pip python-is-python3 libglib2.0-0 libsm6 libxrender1 libxext6 \
     # Make directory to be used for database
     && mkdir /data \
     # Clone the repo and install requirements
