@@ -685,7 +685,7 @@ class GlobalFunctions:
         conn.close()
 
     def generateMetadata(comicFile,apiKey):
-        subprocess.Popen([r'comictagger','--cv-api-key', apiKey, '-f', comicFile, '--no-overwrite', '-o', '-s', '-t', 'CR', '-w'], cwd=os.getcwd())
+        subprocess.Popen([r'comictagger','--cv-api-key', apiKey, '-f', comicFile, '-o', '-s', '-t', 'CR', '-w'], cwd=os.getcwd())
     
     def scanComicMetadata():
         #Create connections to database
