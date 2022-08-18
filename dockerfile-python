@@ -1,0 +1,19 @@
+FROM python:latest
+# Install python/pip
+RUN mkdir /data \
+    # Clone the repo and install requirements
+    && cd / && git clone 'https://github.com/andydeangelis/ComicDownloader.git' \
+    # Switching to dev branch here
+    && cd /ComicDownloader && git switch comicdownloader-dev \
+    && pip3 install -r /ComicDownloader/requirements.txt \
+    # Create empty directory to mount comic library
+    && mkdir /comics \
+    # Clone and build comictagger
+    && cd / && git clone 'https://github.com/comictagger/comictagger.git' \
+    && cd /comictagger && git switch develop \
+    && pip3 install -r /comictagger/requirements_dev.txt \
+    && cd /comictagger && python setup.py install \
+    # Clean Up
+    && apt-get autoremove -y
+
+ENTRYPOINT ["python", "/ComicDownloader/__main__.py"]
