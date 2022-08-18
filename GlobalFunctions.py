@@ -714,7 +714,7 @@ class GlobalFunctions:
                 if(file.endswith(".cbz")):
                     comicFile = os.path.join(root,file)
                     zip_file = zipFile.ZipFile(comicFile,'r')
-                    if 'ComicInfo.xml' not in zip_file.namelist()
+                    if 'ComicInfo.xml' not in zip_file.namelist():
                         print(comicFile + " does not have any metadata.")
                     #GlobalFunctions.generateMetadata(comicFile,apiKey)
         
