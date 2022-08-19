@@ -243,7 +243,7 @@ class GlobalFunctions:
         for row in tqdm(allComics):
             GlobalFunctions.pullComic(row,rootPath,apiKey)
            
-    def single_comic_download(link):
+    def single_comic_download():
         GlobalFunctions.cls()
 
         #Create connections to database
