@@ -279,6 +279,8 @@ class GlobalFunctions:
             print(rootPath)
             print(apiKey)
 
+            GlobalFunctions.pullComic(checkComic,rootPath,apiKey)
+
         except ValueError:
             GlobalFunctions.addRemoveComicMenu()
               
