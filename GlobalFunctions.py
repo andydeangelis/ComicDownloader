@@ -265,7 +265,19 @@ class GlobalFunctions:
         try:
             comicToCheck = (int(input ("Enter number of comic to remove from queue (this will not remove history): ")))
             checkComic = comicList[(comicToCheck - 1)][1]
-            print(checkComic)            
+            
+            root_path_query = "SELECT * FROM _config"
+            cur.execute(root_path_query)
+            root_path = cur.fetchall()
+
+            for rootRow in root_path:
+                rootPath = rootRow[0]
+                apiKey = rootRow[1]
+            
+            print(checkComic)
+            print(rootPath)
+            print(apiKey)
+
         except ValueError:
             GlobalFunctions.addRemoveComicMenu()
               
