@@ -280,7 +280,8 @@ class GlobalFunctions:
             print(apiKey)
 
             GlobalFunctions.pullComic(checkComic,rootPath,apiKey)
-
+            GlobalFunctions.mainMenu()
+            
         except ValueError:
             GlobalFunctions.addRemoveComicMenu()
               
