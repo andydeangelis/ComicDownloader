@@ -264,7 +264,7 @@ class GlobalFunctions:
 
         try:
             comicToCheck = (int(input ("Enter number of comic to remove from queue (this will not remove history): ")))
-            checkComic = comicList[(comicToCheck - 1)][1]
+            checkComic = comicList[(comicToCheck - 1)]
             
             root_path_query = "SELECT * FROM _config"
             cur.execute(root_path_query)
@@ -274,7 +274,8 @@ class GlobalFunctions:
                 rootPath = rootRow[0]
                 apiKey = rootRow[1]
             
-            print(checkComic)
+            print(checkComic[0])
+            print(checkComic[1])
             print(rootPath)
             print(apiKey)
 
