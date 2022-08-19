@@ -55,6 +55,7 @@ class GlobalFunctions:
 
             1: Run batch downloader
             2: Add/Remove Comics
+            3. Check single comic from existing list
 
             M: Update all comic Metadata
             
@@ -68,6 +69,8 @@ class GlobalFunctions:
                 GlobalFunctions.comicDownload()
             elif choice == "2":
                 GlobalFunctions.addRemoveComicMenu()
+            elif choice == "3":
+                GlobalFunctions.single_comic_download()
             elif choice == "M" or choice =="m":
                 GlobalFunctions.scanComicMetadata()
             elif choice=="Q" or choice=="q":
@@ -191,8 +194,7 @@ class GlobalFunctions:
 
         1: Add New Comic to tracker
         2: Remove Comic from tracker
-        3: Download Single Comic or Series without tracking
-        4: Search for Comics
+        3: Search for Comics
 
         Q: Quit
 
@@ -206,9 +208,6 @@ class GlobalFunctions:
         elif choice == "2":
             GlobalFunctions.remove_comic()
         elif choice == "3":
-            track = 'false'
-            GlobalFunctions.add_new_comic(track)
-        elif choice == "4":
             GlobalFunctions.comicSearch()
         elif choice=="Q" or choice=="q":
             GlobalFunctions.cls()
@@ -245,136 +244,32 @@ class GlobalFunctions:
             GlobalFunctions.pullComic(row,rootPath,apiKey)
            
     def single_comic_download(link):
+        GlobalFunctions.cls()
+
+        #Create connections to database
         conn = sqlite3.connect("/data/comicDatabase.db")
         cur = conn.cursor()
-        root_path_query = "SELECT * FROM _config"
-        cur.execute(root_path_query)
-        root_path = cur.fetchall()
-        conn.close()
 
-        for rootRow in root_path:
-            rootPath = rootRow[0]            
+        #Get the current list of comics
+        comicListQuery = 'SELECT * from _comicURLs WHERE tracked == 1'
+        cur.execute(comicListQuery)
+        comicList = cur.fetchall()
+
+        i = 1
+
+        for row in comicList:
+            listNum = str(i)
+            print(listNum + ". " + row[2])
+            i = i+1
 
         try:
-            newComic = link             
-        except:
+            comicToCheck = (int(input ("Enter number of comic to remove from queue (this will not remove history): ")))
+            checkComic = comicList[(comicToCheck - 1)][1]
+            print(checkComic)            
+        except ValueError:
             GlobalFunctions.addRemoveComicMenu()
-        
-        sess = requests.session()
-        retries = Retry(total=5, backoff_factor=1)
-        sess.mount('http://', HTTPAdapter(max_retries=retries))
-        headers = {
-            'User-Agent':
-                'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36',
-            'sec-fetch-mode': 'navigate',
-            'secfetch-user': '?1'
-        }
-
-        title = (newComic.split("/"))
-        if title[4] == title[-1]:
-            newComic = "https://readcomicsonline.ru/comic/" + title[4]
-            print(newComic)
-        else:
-            newComic = "https://readcomicsonline.ru/comic/" + title[4]
-            print(newComic)
-        
-        page = sess.get(newComic, headers=headers)
-        time.sleep(5)
-        
-        soup = BeautifulSoup(page.text,"html5lib")
-        links = soup.findAll('a')
-        
-        comicFolder = title[4].replace("-"," ")
-        
-        findLinks = []
-
-        for link in links:
-            try:
-                if "/comic/" in link.get('href'):
-                    findLinks.append(link)
-            except EnvironmentError as e:
-                print(e)
-        
-        for link in findLinks:
-            try:
-                # Create the URL to the issue from the relative link on the page. the '&readType=1' 
-                # option specifies to show the full comic on one page.  
-                print(link)
-                comicLink = (link.get('href')).replace(" ","")
-                print(comicLink)
-                # Create our sesion to the issue and get the encoded html. 
-                comicChapterPage = sess.get(comicLink)
-                time.sleep(5)
-                page_source = BeautifulSoup(comicChapterPage.text.encode("utf-8"), "html.parser")
-                
-                # Find each image link from the encoded html.
-                img_list = page_source.findAll('img')
-                
-                # Generate the issue name.
-                file_issue_name = comicLink.split("/")
-                file_issue_name = file_issue_name[-1]
-                file_issue_name = file_issue_name.split("?")
-                file_issue_name = file_issue_name[0]
-                file_issue_name = file_issue_name.replace("-"," ").replace("%","")  
-
-                # Set the name for the CBZ file.
-                # cbz_name = comicLink.replace("https://readcomicsonline.ru/comic/","").split("/")
-                # cbz_name = cbz_name[0].replace("-"," ")
-                # cbz_name = cbz_name + " - Ch " + file_issue_name            
-                cbz_name = (link.string).replace(":","").replace(" / ","").replace("/"," ").replace("-)",")").replace("%","")
-                
-                # Specify the paths. The 'tmpPath' is the issue sub-directory in the comic directory
-                # where the jpegs for the issue will be stored. The 'comicPath' is the top level folder
-                # where the resulting CBZ file will be stored.
-                tmpPath = rootPath + "/" + comicFolder + "/" + file_issue_name     
-                comic_path = rootPath + "/" + comicFolder + "/"
-
-                # Check if the directory exists. If not, create it.      
-                if os.path.isdir(tmpPath):
-                    continue
-                else:
-                    os.makedirs(tmpPath)
-                
-                # Take the list of image links that we have in img_list, change the '=s1600' value 
-                # to '=s0' value to ensure high quality images are pulled, then add the new links to 
-                # the links[] list.  
-                imgLinks = []
-
-                for img in img_list:
-                    hdImgLink = img.get('data-src')
-                    if hdImgLink is not None:
-                        imgLinks.append(hdImgLink.replace(" ",""))
-
-                total_images = len(imgLinks)
-                
-                print("Downloading images for "+cbz_name)
-
-                #This downloads all the images for the comic as jpgs in a folder named for the issue.
-                for imgLink in tqdm(imgLinks):
-                    # Ensures that a zero is prepended to ensure proper page order.
-                    max_digits = int(math.log10(int(total_images))) + 1
-                    current_chapter_value = imgLinks.index(imgLink)
-                    file_name = str(current_chapter_value).zfill(max_digits) + ".jpg"
-                    file_name = imgLink.split("/")
-                    file_name = file_name[-1]
-                    r = (sess.get(imgLink)).content
-                    f = open(tmpPath + "/" + file_name, 'wb')
-                    f.write(r)
-                    f.close()
-
-                print("Creating comic file "+cbz_name+".cbz...")
-                # Create the CBZ file from the downloaded images, then delete the image files.
-                zipObj = ZipFile(comic_path + cbz_name + ".cbz", 'w')
-                for issuePage in tqdm(os.listdir(tmpPath)):
-                    zipObj.write(tmpPath + "/" + issuePage)
-                    os.remove(tmpPath + "/" + issuePage)
-                zipObj.close()    
-                os.rmdir(tmpPath)
-
-                fullComicPath = comic_path + cbz_name + ".cbz"
-                GlobalFunctions.generateMetadata(fullComicPath)
-            except EnvironmentError as e:
-                print(e)
+              
+        conn.close()
         
     def modifySettingsMenu():
         GlobalFunctions.cls()
