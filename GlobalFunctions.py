@@ -673,6 +673,9 @@ class GlobalFunctions:
 
                     fullComicPath = comic_path + cbz_name + ".cbz"
                     
+                    # Set the permissions on the file
+                    os.chmod(fullComicPath, 0o0777)
+                    
                     GlobalFunctions.generateMetadata(fullComicPath,apiKey)
 
                     # Commit the change to the database.
