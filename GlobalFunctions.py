@@ -299,7 +299,7 @@ class GlobalFunctions:
             conn.close()
         elif choice == "S" or choice =="s":
             search = input("Enter search criteria: ")
-            if not re.match("^[a-z][A-Z]*$", input):
+            if not re.match("^[a-z][A-Z]*$", search):
                 print("Only characters a-z or A-Z are allowed!")
                 input("Press enter to return to previous menu:")
                 GlobalFunctions.single_comic_download()
