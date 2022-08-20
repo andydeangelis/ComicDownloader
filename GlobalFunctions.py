@@ -249,46 +249,63 @@ class GlobalFunctions:
     def single_comic_download():
         GlobalFunctions.cls()
 
-        #Create connections to database
-        conn = sqlite3.connect("/data/comicDatabase.db")
-        cur = conn.cursor()
+        choice = input("""
+        ***PLEASE MAKE YOUR SELECTION***
 
-        #Get the current list of comics
-        comicListQuery = 'SELECT * from _comicURLs WHERE tracked == 1'
-        cur.execute(comicListQuery)
-        comicList = cur.fetchall()
+        L: List all comics
+        S: Search for specific comic
 
-        i = 1
+        Q: Quit
 
-        for row in comicList:
-            listNum = str(i)
-            print(listNum + ". " + row[2])
-            i = i+1
+        M: Main Menu
 
-        try:
-            comicToCheck = (int(input ("Enter number of comic to remove from queue (this will not remove history): ")))
-            checkComic = comicList[(comicToCheck - 1)]
-            
-            root_path_query = "SELECT * FROM _config"
-            cur.execute(root_path_query)
-            root_path = cur.fetchall()
+        Please enter your choice: """)
 
-            for rootRow in root_path:
-                rootPath = rootRow[0]
-                apiKey = rootRow[1]
-            
-            print(checkComic[0])
-            print(checkComic[1])
-            print(rootPath)
-            print(apiKey)
+        if choice == "L" or choice == "l":
+            #Create connections to database
+            conn = sqlite3.connect("/data/comicDatabase.db")
+            cur = conn.cursor()
 
-            GlobalFunctions.pullComic(checkComic,rootPath,apiKey)
+            #Get the current list of comics
+            comicListQuery = 'SELECT * from _comicURLs WHERE tracked == 1'
+            cur.execute(comicListQuery)
+            comicList = cur.fetchall()
+
+            i = 1
+
+            for row in comicList:
+                listNum = str(i)
+                print(listNum + ". " + row[2])
+                i = i+1
+
+            try:
+                comicToCheck = (int(input ("Enter number of comic to remove from queue (this will not remove history): ")))
+                checkComic = comicList[(comicToCheck - 1)]
+                
+                root_path_query = "SELECT * FROM _config"
+                cur.execute(root_path_query)
+                root_path = cur.fetchall()
+
+                for rootRow in root_path:
+                    rootPath = rootRow[0]
+                    apiKey = rootRow[1]
+
+                GlobalFunctions.pullComic(checkComic,rootPath,apiKey)
+                GlobalFunctions.single_comic_download()
+
+            except ValueError:
+                GlobalFunctions.addRemoveComicMenu()
+                
+            conn.close()
+        elif choice=="Q" or choice=="q":
+            GlobalFunctions.cls()
+            sys.exit
+        elif choice == "M" or choice == "m":
             GlobalFunctions.mainMenu()
-
-        except ValueError:
-            GlobalFunctions.addRemoveComicMenu()
-              
-        conn.close()
+        else:
+            print("You must only select a valid entry.")
+            print("Please try again")
+            GlobalFunctions.mainMenu()
         
     def modifySettingsMenu():
         GlobalFunctions.cls()
