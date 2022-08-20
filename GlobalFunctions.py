@@ -242,6 +242,9 @@ class GlobalFunctions:
 
         for row in tqdm(allComics):
             GlobalFunctions.pullComic(row,rootPath,apiKey)
+
+        print("Sleeping for 20 seconds to finish metadata lookup.")
+        time.sleep(20)
            
     def single_comic_download():
         GlobalFunctions.cls()
@@ -281,7 +284,7 @@ class GlobalFunctions:
 
             GlobalFunctions.pullComic(checkComic,rootPath,apiKey)
             GlobalFunctions.mainMenu()
-            
+
         except ValueError:
             GlobalFunctions.addRemoveComicMenu()
               
