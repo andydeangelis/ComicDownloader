@@ -301,6 +301,8 @@ class GlobalFunctions:
             search = input("Enter search criteria: ")
             if not re.match("^[a-z][A-Z]*$", input):
                 print("Only characters a-z or A-Z are allowed!")
+                input("Press enter to return to previous menu:")
+                GlobalFunctions.single_comic_download()
         elif choice=="Q" or choice=="q":
             GlobalFunctions.cls()
             sys.exit
