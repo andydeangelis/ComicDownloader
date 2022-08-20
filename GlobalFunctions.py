@@ -299,7 +299,41 @@ class GlobalFunctions:
             conn.close()
         elif choice == "S" or choice =="s":
             search = input("Enter search criteria: ")
-            print(search)
+            search = search.replace(" ","%")
+            
+            conn = sqlite3.connect("/data/comicDatabase.db")
+            cur = conn.cursor()
+
+            #Get the current list of comics
+            comicListQuery = 'SELECT * from _comicURLs WHERE tracked == 1 and name like' + "'%" + search + "%'"
+            cur.execute(comicListQuery)
+            comicList = cur.fetchall()
+
+            i = 1
+
+            for row in comicList:
+                listNum = str(i)
+                print(listNum + ". " + row[2])
+                i = i+1
+
+            try:
+                comicToCheck = (int(input ("Enter number of comic to remove from queue (this will not remove history): ")))
+                checkComic = comicList[(comicToCheck - 1)]
+                
+                root_path_query = "SELECT * FROM _config"
+                cur.execute(root_path_query)
+                root_path = cur.fetchall()
+
+                for rootRow in root_path:
+                    rootPath = rootRow[0]
+                    apiKey = rootRow[1]
+
+                GlobalFunctions.pullComic(checkComic,rootPath,apiKey)
+                GlobalFunctions.single_comic_download()
+
+            except ValueError:
+                GlobalFunctions.addRemoveComicMenu()
+
         elif choice=="Q" or choice=="q":
             GlobalFunctions.cls()
             sys.exit
