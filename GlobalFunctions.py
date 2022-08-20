@@ -604,7 +604,7 @@ class GlobalFunctions:
 
                     fullComicPath = comic_path + cbz_name + ".cbz"
                     
-                    # Set the permissions on the file
+                    # Set the permissions on the file, otherwise it can't be modified outside the container.
                     os.chmod(fullComicPath, 0o0777)
                     
                     GlobalFunctions.generateMetadata(fullComicPath,apiKey)
