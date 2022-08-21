@@ -451,6 +451,8 @@ class GlobalFunctions:
         try:
             GlobalFunctions.cls()
 
+            userSearchInput = input('What are you searching for? ')
+
             sess = requests.session()
             
             retries = Retry(total=5, backoff_factor=1)
@@ -465,13 +467,12 @@ class GlobalFunctions:
             soup = BeautifulSoup(page.text,"html5lib")
             searchData = (json.loads(soup.body.text))['suggestions']
 
-            userSearchInput = input('What are you searching for? ')
-
             i = 0
             searchMatch = []
             for item in searchData:
                 if userSearchInput.lower() in (searchData[i]['value']).lower():
                     searchMatch.append(searchData[i])
+                i = i + 1
 
             for match in searchMatch:
                 print(match)                    
