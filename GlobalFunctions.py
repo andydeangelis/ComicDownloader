@@ -483,7 +483,7 @@ class GlobalFunctions:
             #searchSelectNum = input("Input the number of the series you want to add: ")
             #searchSelectData = searchMatch[searchSelectNum -1]['data']
 
-            print(searchSelectData)
+            #print(searchSelectData)
 
         except EnvironmentError as e:
             print(e)
