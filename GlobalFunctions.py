@@ -480,7 +480,7 @@ class GlobalFunctions:
                 print(listNum + ". " + match['value'])
                 resultCounter = resultCounter + 1 
 
-            #searchSelectNum = input("Input the number of the series you want to add: ")
+            searchSelectNum = input("Input the number of the series you want to add: ")
             #searchSelectData = searchMatch[searchSelectNum -1]['data']
 
             #print(searchSelectData)
