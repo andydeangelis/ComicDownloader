@@ -481,7 +481,7 @@ class GlobalFunctions:
                 resultCounter = resultCounter + 1 
 
             searchSelectNum = input("Input the number of the series you want to add: ")
-            #searchSelectData = searchMatch[searchSelectNum -1]['data']
+            searchSelectData = searchMatch[searchSelectNum - 1]['data']
 
             #print(searchSelectData)
 
