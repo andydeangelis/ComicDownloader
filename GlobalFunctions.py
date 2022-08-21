@@ -474,8 +474,11 @@ class GlobalFunctions:
                     searchMatch.append(searchData[i])
                 i = i + 1
 
+            resultCounter = 1
             for match in searchMatch:
-                print(match)                    
+                listNum = str(resultCounter)
+                print(listNum + ". " + match['value'])
+                resultCounter = resultCounter + 1                    
 
         except EnvironmentError as e:
             print(e)
