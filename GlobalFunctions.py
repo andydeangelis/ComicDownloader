@@ -478,7 +478,12 @@ class GlobalFunctions:
             for match in searchMatch:
                 listNum = str(resultCounter)
                 print(listNum + ". " + match['value'])
-                resultCounter = resultCounter + 1                    
+                resultCounter = resultCounter + 1 
+
+            searchSelectNum = input("Input the number of the series you want to add: ")
+            searchSelectData = searchMatch[searchSelectNum -1]['data']
+
+            print(searchSelectData)
 
         except EnvironmentError as e:
             print(e)
