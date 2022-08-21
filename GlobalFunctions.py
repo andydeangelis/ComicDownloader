@@ -461,46 +461,20 @@ class GlobalFunctions:
                 'sec-fetch-mode': 'navigate',
                 'secfetch-user': '?1'
             }
-            page = sess.get("https://readcomicsonline.ru/comic-list", headers=headers)
-
-
+            page = sess.get("https://readcomicsonline.ru/search", headers=headers)
             soup = BeautifulSoup(page.text,"html5lib")
+            searchData = (json.loads(soup.body.text))['suggestions']
 
-            links = soup.findAll('a')
+            userSearchInput = input('What are you searching for? ')
 
-            findLinks = []
+            i = 0
+            searchMatch = []
+            for item in searchData:
+                if userSearchInput.lower() in (searchData[i]['value']).lower():
+                    searchMatch.append(searchData[i])
 
-            x = 1
-
-            for link in links:
-                if "comic-list?alpha=" in link.get('href'):
-                    indexLetter = link.get('href').split('=')[1]
-                    findLinks.append([x,indexLetter,link.get('href')])
-                    x = x + 1
-
-            # Let's create our table
-            searchTable = PrettyTable()
-            searchTable.field_names = ["Number", "Section", "Link"]
-
-            searchTable.align["Number"] = "l"
-            searchTable.align["Section"] = "l"
-            searchTable.align["Link"] = "l"
-
-            for item in findLinks:
-                searchTable.add_row([item[0],item[1],item[2]])
-
-            print(searchTable)
-
-            selection = input("Enter number for the section you want to browse: ")
-
-            for row in findLinks:
-                if row[0] == int(selection):
-                    tagLinks = []
-                    for link in links:
-                        searchHREF = "https://readcomicsonline.ru/comic-list/tag/" + row[1].lower()
-                        if searchHREF in link.get('href'):
-                            print(link.text)
-
+            for match in searchMatch:
+                print(match)                    
 
         except EnvironmentError as e:
             print(e)
