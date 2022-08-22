@@ -253,7 +253,7 @@ class GlobalFunctions:
         ***PLEASE MAKE YOUR SELECTION***
 
         L: List all comics
-        S: Search for specific comic
+        F: Find a comic in current tracked list
 
         Q: Quit
 
@@ -305,7 +305,7 @@ class GlobalFunctions:
             cur = conn.cursor()
 
             #Get the current list of comics
-            comicListQuery = 'SELECT * from _comicURLs WHERE tracked == 1 and name like' + "'%" + search + "%'"
+            comicListQuery = 'SELECT * from _comicURLs WHERE tracked == 1 and name like' + "'%" + search + "%' COLLATE NOCASE"
             cur.execute(comicListQuery)
             comicList = cur.fetchall()
 
