@@ -489,11 +489,9 @@ class GlobalFunctions:
             if bool(searchSelectNum):
                 tmpNum = int(searchSelectNum)
                 searchSelectData = searchMatch[tmpNum - 1]['data']
-                print(searchSelectData)
                 comicURL = 'https://readcomicsonline.ru/comic/' + searchSelectData
-                print(comicURL)
-                #track = 'true'
-                #GlobalFunctions.add_new_comic(track)
+                track = 'true'
+                GlobalFunctions.add_new_comic(track,comicURL)
             else:
                 GlobalFunctions.mainMenu()            
 
