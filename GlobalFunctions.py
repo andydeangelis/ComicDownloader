@@ -451,7 +451,10 @@ class GlobalFunctions:
         try:
             GlobalFunctions.cls()
 
-            userSearchInput = input('What are you searching for? ')
+            userSearchInput = input('What are you searching for (Leave blank to return to main menu)? ')
+
+            if userSearchInput == "":
+                GlobalFunctions.mainMenu()
 
             sess = requests.session()
             
@@ -480,7 +483,11 @@ class GlobalFunctions:
                 print(listNum + ". " + match['value'])
                 resultCounter = resultCounter + 1 
 
-            searchSelectNum = (int(input("Input the number of the series you want to add: ")))
+            searchSelectNum = (int(input("Input the number of the series you want to add (Leave blank to return to main menu): ")))
+
+            if searchSelectNum == "":
+                GlobalFunctions.mainMenu()
+                
             searchSelectData = searchMatch[searchSelectNum - 1]['data']
 
             print(searchSelectData)
