@@ -106,13 +106,12 @@ class GlobalFunctions:
             for row in allComics:
                 comicTable.add_row ([row[2],row[1]])
                 
-            print(comicTable)
-
             if not newComic:
+                print(comicTable)
                 newComic = input ("""Enter URL for new comic (Leave blank and press Enter to return to menu): """)
             
             if newComic:
-                checkExistsQuery = "SELECT * from _comicURLs where link is " + "'" + newComic + "'"
+                checkExistsQuery = "SELECT * from _comicURLs where link is " + "'" + newComic + "' COLLATE NOCASE"
                 cur.execute(checkExistsQuery)
                 exists = cur.fetchall()
                 if exists:                        
