@@ -483,10 +483,11 @@ class GlobalFunctions:
                 print(listNum + ". " + match['value'])
                 resultCounter = resultCounter + 1 
 
-            searchSelectNum = (int(input("Input the number of the series you want to add (Leave blank to return to main menu): ")))
+            searchSelectNum = input("Input the number of the series you want to add (Leave blank to return to main menu): ")
 
             if bool(searchSelectNum):
-                searchSelectData = searchMatch[searchSelectNum - 1]['data']
+                tmpNum = int(searchSelectNum)
+                searchSelectData = searchMatch[tmpNum - 1]['data']
                 print(searchSelectData)
             else:
                 GlobalFunctions.mainMenu()            
