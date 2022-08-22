@@ -487,10 +487,9 @@ class GlobalFunctions:
 
             if bool(searchSelectNum):
                 searchSelectData = searchMatch[searchSelectNum - 1]['data']
+                print(searchSelectData)
             else:
-                GlobalFunctions.mainMenu()
-
-            print(searchSelectData)
+                GlobalFunctions.mainMenu()            
 
         except EnvironmentError as e:
             print(e)
