@@ -453,7 +453,7 @@ class GlobalFunctions:
 
             userSearchInput = input('What are you searching for (Leave blank to return to main menu)? ')
 
-            if userSearchInput == "":
+            if not bool(userSearchInput):
                 GlobalFunctions.mainMenu()
 
             sess = requests.session()
@@ -485,10 +485,10 @@ class GlobalFunctions:
 
             searchSelectNum = (int(input("Input the number of the series you want to add (Leave blank to return to main menu): ")))
 
-            if searchSelectNum == "":
+            if bool(searchSelectNum):
+                searchSelectData = searchMatch[searchSelectNum - 1]['data']
+            else:
                 GlobalFunctions.mainMenu()
-                
-            searchSelectData = searchMatch[searchSelectNum - 1]['data']
 
             print(searchSelectData)
 
