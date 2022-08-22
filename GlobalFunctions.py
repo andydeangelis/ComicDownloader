@@ -85,7 +85,7 @@ class GlobalFunctions:
         except EnvironmentError as e:
             print(e)
 
-    def add_new_comic(track):
+    def add_new_comic(track,newComic = ""):
         try:
             GlobalFunctions.cls()
             #Create connections to database
@@ -106,9 +106,10 @@ class GlobalFunctions:
             for row in allComics:
                 comicTable.add_row ([row[2],row[1]])
                 
-            print(comicTable)    
+            print(comicTable)
 
-            newComic = input ("""Enter URL for new comic (Leave blank and press Enter to return to menu): """)
+            if not newComic:
+                newComic = input ("""Enter URL for new comic (Leave blank and press Enter to return to menu): """)
             
             if newComic:
                 checkExistsQuery = "SELECT * from _comicURLs where link is " + "'" + newComic + "'"
@@ -489,6 +490,8 @@ class GlobalFunctions:
                 tmpNum = int(searchSelectNum)
                 searchSelectData = searchMatch[tmpNum - 1]['data']
                 print(searchSelectData)
+                #track = 'true'
+                #GlobalFunctions.add_new_comic(track)
             else:
                 GlobalFunctions.mainMenu()            
 
