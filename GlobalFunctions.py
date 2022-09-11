@@ -279,7 +279,7 @@ class GlobalFunctions:
                 i = i+1
 
             try:
-                comicToCheck = (int(input ("Enter number of comic to remove from queue (this will not remove history): ")))
+                comicToCheck = (int(input ("Enter number of comic to check for updates: ")))
                 checkComic = comicList[(comicToCheck - 1)]
                 
                 root_path_query = "SELECT * FROM _config"
@@ -297,7 +297,7 @@ class GlobalFunctions:
                 GlobalFunctions.addRemoveComicMenu()
                 
             conn.close()
-        elif choice == "S" or choice =="s":
+        elif choice == "F" or choice =="f":
             search = input("Enter search criteria: ")
             search = search.replace(" ","%")
             
@@ -317,7 +317,7 @@ class GlobalFunctions:
                 i = i+1
 
             try:
-                comicToCheck = (int(input ("Enter number of comic to remove from queue (this will not remove history): ")))
+                comicToCheck = (int(input ("Enter number of comic to check for updates: ")))
                 checkComic = comicList[(comicToCheck - 1)]
                 
                 root_path_query = "SELECT * FROM _config"
