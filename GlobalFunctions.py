@@ -706,9 +706,11 @@ class GlobalFunctions:
                             if 'ComicInfo.xml' not in zip_file.namelist():
                                 print("Attempting to gather metadata for " + comicFile + " ...")
                                 GlobalFunctions.generateMetadata(comicFile,apiKey)
+                                time.sleep(10)
                             else:
                                 print("Updating metadata for " + comicFile + " ...")
                                 GlobalFunctions.generateMetadata(comicFile,apiKey)
+                                time.sleep(10)
 
             except ValueError:
                 GlobalFunctions.addRemoveComicMenu()
