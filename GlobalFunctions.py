@@ -771,7 +771,7 @@ class GlobalFunctions:
             print("Please try again")
             GlobalFunctions.mainMenu()
         
-        GlobalFunctions.mainMenu()
+        #GlobalFunctions.mainMenu()
 
     def createNewDatabase():
         conn = None
