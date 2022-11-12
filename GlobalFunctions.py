@@ -734,6 +734,7 @@ class GlobalFunctions:
             try:
                 comicToCheck = (int(input ("Enter number of comic to check for updates: ")))
                 checkComic = comicList[(comicToCheck - 1)]
+                print(checkComic)
                 
                 root_path_query = "SELECT * FROM _config"
                 cur.execute(root_path_query)
@@ -743,7 +744,7 @@ class GlobalFunctions:
                     rootPath = rootRow[0]
                     apiKey = rootRow[1]
 
-                path = rootPath
+                path = rootPath + "/" + 
                 print(path)
                 
                 #for root, dirs, files in os.walk(path):
