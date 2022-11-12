@@ -667,8 +667,7 @@ class GlobalFunctions:
         if choice == "F" or choice =="f":
             search = input("Enter search criteria: ")
             search = search.replace(" ","%")
-            print(checkComic[2])
-                
+                            
             conn = sqlite3.connect("/data/comicDatabase.db")
             cur = conn.cursor()
 
