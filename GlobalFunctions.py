@@ -749,13 +749,14 @@ class GlobalFunctions:
                     for file in files:
                         if(file.endswith(".cbz")):
                             comicFile = os.path.join(root,file)
-                            zip_file = ZipFile(comicFile,'r')
-                            if 'ComicInfo.xml' not in zip_file.namelist():
-                                print("Attempting to gather metadata for " + comicFile + " ...")
-                                GlobalFunctions.generateMetadata(comicFile,apiKey)
-                            else:
-                                print("Updating metadata for " + comicFile + " ...")
-                                GlobalFunctions.generateMetadata(comicFile,apiKey)
+                            print(comicFile)
+                            #zip_file = ZipFile(comicFile,'r')
+                            #if 'ComicInfo.xml' not in zip_file.namelist():
+                            #    print("Attempting to gather metadata for " + comicFile + " ...")
+                            #    GlobalFunctions.generateMetadata(comicFile,apiKey)
+                            #else:
+                            #    print("Updating metadata for " + comicFile + " ...")
+                            #    GlobalFunctions.generateMetadata(comicFile,apiKey)
 
             except ValueError:
                 GlobalFunctions.addRemoveComicMenu()
