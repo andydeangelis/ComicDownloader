@@ -734,8 +734,7 @@ class GlobalFunctions:
             try:
                 comicToCheck = (int(input ("Enter number of comic to check for updates: ")))
                 checkComic = comicList[(comicToCheck - 1)]
-                print(checkComic[0])
-                
+                                
                 root_path_query = "SELECT * FROM _config"
                 cur.execute(root_path_query)
                 root_path = cur.fetchall()
@@ -744,7 +743,7 @@ class GlobalFunctions:
                     rootPath = rootRow[0]
                     apiKey = rootRow[1]
 
-                path = rootPath + "/"
+                path = rootPath + "/" + checkComic[0]
                 print(path)
                 
                 #for root, dirs, files in os.walk(path):
@@ -772,7 +771,7 @@ class GlobalFunctions:
             print("Please try again")
             GlobalFunctions.mainMenu()
         
-        #GlobalFunctions.mainMenu()
+        GlobalFunctions.mainMenu()
 
     def createNewDatabase():
         conn = None
