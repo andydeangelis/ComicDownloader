@@ -656,7 +656,6 @@ class GlobalFunctions:
         choice = input("""
         ***PLEASE MAKE YOUR SELECTION***
 
-        L: List all comics
         F: Find a comic in current tracked list
 
         Q: Quit
@@ -665,57 +664,11 @@ class GlobalFunctions:
 
         Please enter your choice: """)
         
-        if choice == "L" or choice == "l":
-            #Create connections to database
-            conn = sqlite3.connect("/data/comicDatabase.db")
-            cur = conn.cursor()
-
-            #Get the current list of comics
-            comicListQuery = 'SELECT * from _comicURLs WHERE tracked == 1'
-            cur.execute(comicListQuery)
-            comicList = cur.fetchall()
-
-            i = 1
-
-            for row in comicList:
-                listNum = str(i)
-                print(listNum + ". " + row[2])
-                i = i+1
-
-            try:
-                comicToCheck = (int(input ("Enter number of comic to check for updates: ")))
-                checkComic = comicList[(comicToCheck - 1)]
-                
-                root_path_query = "SELECT * FROM _config"
-                cur.execute(root_path_query)
-                root_path = cur.fetchall()
-
-                for rootRow in root_path:
-                    rootPath = rootRow[0]
-                    apiKey = rootRow[1]
-
-                path = rootPath
-
-                for root, dirs, files in os.walk(path):
-                    for file in files:
-                        if(file.endswith(".cbz")):
-                            comicFile = os.path.join(root,file)
-                            zip_file = ZipFile(comicFile,'r')
-                            if 'ComicInfo.xml' not in zip_file.namelist():
-                                print("Attempting to gather metadata for " + comicFile + " ...")
-                                GlobalFunctions.generateMetadata(comicFile,apiKey)
-                            else:
-                                print("Updating metadata for " + comicFile + " ...")
-                                GlobalFunctions.generateMetadata(comicFile,apiKey)
-
-            except ValueError:
-                GlobalFunctions.addRemoveComicMenu()
-                
-            conn.close()
-        elif choice == "F" or choice =="f":
+        if choice == "F" or choice =="f":
             search = input("Enter search criteria: ")
             search = search.replace(" ","%")
-            
+            print(checkComic[2])
+                
             conn = sqlite3.connect("/data/comicDatabase.db")
             cur = conn.cursor()
 
@@ -734,7 +687,6 @@ class GlobalFunctions:
             try:
                 comicToCheck = (int(input ("Enter number of comic to check for updates: ")))
                 checkComic = comicList[(comicToCheck - 1)]
-                print(checkComic[2])
                                 
                 root_path_query = "SELECT * FROM _config"
                 cur.execute(root_path_query)
@@ -745,20 +697,19 @@ class GlobalFunctions:
                     apiKey = rootRow[1]
 
                 path = rootPath + "/" + checkComic[2]
-                print(path)
-                                
+                                                
                 for root, dirs, files in os.walk(path):
                     for file in files:
                         if(file.endswith(".cbz")):
                             comicFile = os.path.join(root,file)
                             print(comicFile)
-                            #zip_file = ZipFile(comicFile,'r')
-                            #if 'ComicInfo.xml' not in zip_file.namelist():
-                            #    print("Attempting to gather metadata for " + comicFile + " ...")
-                            #    GlobalFunctions.generateMetadata(comicFile,apiKey)
-                            #else:
-                            #    print("Updating metadata for " + comicFile + " ...")
-                            #    GlobalFunctions.generateMetadata(comicFile,apiKey)
+                            zip_file = ZipFile(comicFile,'r')
+                            if 'ComicInfo.xml' not in zip_file.namelist():
+                                print("Attempting to gather metadata for " + comicFile + " ...")
+                                GlobalFunctions.generateMetadata(comicFile,apiKey)
+                            else:
+                                print("Updating metadata for " + comicFile + " ...")
+                                GlobalFunctions.generateMetadata(comicFile,apiKey)
 
             except ValueError:
                 GlobalFunctions.addRemoveComicMenu()
