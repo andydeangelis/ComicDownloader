@@ -744,7 +744,7 @@ class GlobalFunctions:
                     rootPath = rootRow[0]
                     apiKey = rootRow[1]
 
-                path = rootPath + "/" + checkComic[0]
+                path = rootPath + "/" + checkComic[2]
                 print(path)
                                 
                 for root, dirs, files in os.walk(path):
