@@ -696,7 +696,7 @@ class GlobalFunctions:
 
                 path = rootPath
 
-                for root, dirs, files in os.walk(path):
+                for files in os.walk(path):
                     for file in files:
                         if(file.endswith(".cbz")):
                             comicFile = os.path.join(root,file)
@@ -745,7 +745,7 @@ class GlobalFunctions:
 
                 path = rootPath
 
-                for root, dirs, files in os.walk(path):
+                for files in os.walk(path):
                     for file in files:
                         if(file.endswith(".cbz")):
                             comicFile = os.path.join(root,file)
