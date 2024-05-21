@@ -4,7 +4,7 @@
 from genericpath import isfile
 import os
 import sys
-from GlobalFunctions import GlobalFunctions
+from GlobalFunctions_New import GlobalFunctions
 import argparse
 
 parser = argparse.ArgumentParser()

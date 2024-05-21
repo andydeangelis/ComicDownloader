@@ -16,7 +16,7 @@ RUN mkdir /comics
 # Clone and build comictagger
 RUN cd / && git clone 'https://github.com/comictagger/comictagger.git'
 RUN cd /comictagger && git switch develop
-RUN pip3 install -r /comictagger/requirements_dev.txt
+RUN pip install -r /comictagger/requirements_dev.txt
 RUN cd /comictagger && python setup.py install
 
 ENTRYPOINT ["python", "/ComicDownloader/__main__.py"]
