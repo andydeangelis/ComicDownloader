@@ -1,22 +1,22 @@
 FROM ubuntu:latest
 ENV PYTHONUNBUFFERED=1
-RUN apt-get update \
-    && apt-get install -y git python3 python3-pip python-is-python3 python3-icu \
-    && apt-get install -y libglib2.0-0 libsm6 libxrender1 libxext6 libgl1 \
-    && apt-get install -y curl apt-transport-https gnupg2 \
-    # Make directory to be used for database
-    && mkdir /data \
-    # Clone the repo and install requirements
-    && cd / && git clone 'https://github.com/andydeangelis/ComicDownloader.git' \
-    # Switching to dev branch here
-    && cd /ComicDownloader && git switch comicdownloader-dev \
-    && pip3 install -r /ComicDownloader/requirements.txt \
-    # Create empty directory to mount comic library
-    && mkdir /comics \
-    # Clone and build comictagger
-    && cd / && git clone 'https://github.com/comictagger/comictagger.git' \
-    && cd /comictagger && git switch develop \
-    && pip3 install -r /comictagger/requirements_dev.txt \
-    && cd /comictagger && python setup.py install
+RUN apt-get update
+RUN apt-get install -y git python3 python3-pip python-is-python3 python3-icu
+RUN apt-get install -y libglib2.0-0 libsm6 libxrender1 libxext6 libgl1
+RUN apt-get install -y curl apt-transport-https gnupg2
+# Make directory to be used for database
+RUN mkdir /data
+# Clone the repo and install requirements
+RUN cd / && git clone 'https://github.com/andydeangelis/ComicDownloader.git'
+# Switching to dev branch here
+RUN cd /ComicDownloader && git switch comicdownloader-dev
+RUN pip3 install -r /ComicDownloader/requirements.txt
+# Create empty directory to mount comic library
+RUN mkdir /comics
+# Clone and build comictagger
+RUN cd / && git clone 'https://github.com/comictagger/comictagger.git'
+RUN cd /comictagger && git switch develop
+RUN pip3 install -r /comictagger/requirements_dev.txt
+RUN cd /comictagger && python setup.py install
 
 ENTRYPOINT ["python", "/ComicDownloader/__main__.py"]
