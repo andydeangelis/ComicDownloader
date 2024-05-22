@@ -221,6 +221,7 @@ class GlobalFunctions:
         findLinks = []
 
         for link in links:
+            print("start for loop")
             try:
                 if "/comic/" in link.get('href'):
                     findLinks.append(link)
@@ -234,8 +235,7 @@ class GlobalFunctions:
             try:
                 # Create the URL to the issue from the relative link on the page. the '&readType=1' 
                 # option specifies to show the full comic on one page.
-                comicLink = (link.get('href')).replace(" ","")
-                print(comicLink)                
+                comicLink = (link.get('href')).replace(" ","") 
 
                 # Set the name for the CBZ file.
                 cbz_name = (link.string).replace(":","").replace(" / ","").replace("/"," ").replace("-)",")").replace("%","")
