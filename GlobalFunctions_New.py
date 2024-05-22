@@ -239,10 +239,9 @@ class GlobalFunctions:
                 # Set the name for the CBZ file.
                 cbz_name = (link.string).replace(":","").replace(" / ","").replace("/"," ").replace("-)",")").replace("%","")
                 fileExists = Path(rootPath + "/" + folder + "/" + cbz_name + ".cbz")
-                print(rootPath + "/" + folder + "/" + cbz_name + ".cbz")
                 
                 # If the link exists, continue to the next issue. If not, download the issue.
-                if fileExists.is_file:
+                if fileExists.is_file():
                     continue
                 else:
                     
