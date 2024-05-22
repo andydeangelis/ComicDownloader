@@ -242,10 +242,9 @@ class GlobalFunctions:
 
                 # If the link exists, continue to the next issue. If not, download the issue.
                 if fileExists.is_file:
-                    print(comicLink)
                     continue
                 else:
-                    
+                    print(comicLink)
                     # Create our sesion to the issue and get the encoded html.               
                     comicChapterPage = sess.get(comicLink, headers=headers)
                     page_source = BeautifulSoup(comicChapterPage.text.encode("utf-8"), "html.parser")
