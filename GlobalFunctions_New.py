@@ -231,7 +231,7 @@ class GlobalFunctions:
         #existingComics = os.listdir(rootPath + "/" + folder)
         
         for link in findLinks:
-            try:
+            #try:
                 # Create the URL to the issue from the relative link on the page. the '&readType=1' 
                 # option specifies to show the full comic on one page.
                 comicLink = (link.get('href')).replace(" ","") 
@@ -244,7 +244,7 @@ class GlobalFunctions:
                 if fileExists.is_file:
                     continue
                 else:
-                    print(comicLink)
+                    
                     # Create our sesion to the issue and get the encoded html.               
                     comicChapterPage = sess.get(comicLink, headers=headers)
                     page_source = BeautifulSoup(comicChapterPage.text.encode("utf-8"), "html.parser")
@@ -322,8 +322,8 @@ class GlobalFunctions:
                     
                     GlobalFunctions.generateMetadata(fullComicPath,apiKey)
     
-            except EnvironmentError as e:
-                print(e)
+            #except EnvironmentError as e:
+            #    print(e)
 
     def generateMetadata(comicFile,apiKey):
         subprocess.Popen([r'comictagger','--cv-api-key', apiKey, '-f', comicFile, '-o', '-s', '-t', 'CR', '-w'], cwd=os.getcwd())
