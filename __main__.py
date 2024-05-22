@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
+import git 
+git_dir = "/ComicDownloader"
+g = git.cmd.Git(git_dir)
+g.pull()
+
 from pathlib import Path
 import os
 import sys
