@@ -580,27 +580,21 @@ class GlobalFunctions:
         if config_file.is_file():
             with open(config_file) as f_in:
                 current_root_path = (json.load(f_in))['comic_dir']
+        else:
+            current_root_path = "ROOT PATH NOT SET"
 
         api_file = Path("/data/comicvine_api_key.json")
         if api_file.is_file():
             with open(api_file) as f_in:
                 current_api_key = (json.load(f_in))['comic_api_key']
-        
-        if current_root_path is None:
-            rootPath = 'ROOT PATH NOT SET'
         else:
-            rootPath = current_root_path
+            current_api_key = "API KEY NOT SET"
         
-        if current_api_key is None:
-            APIKey = 'API KEY NOT SET'
-        else:
-            APIKey = current_api_key
-
         choice = input("""
         ***PLEASE MAKE YOUR SELECTION***
 
-        1: Set path to save Comics (Current: """ + rootPath + """)
-        2: Set ComicVine API key (Current: """ + APIKey + """)
+        1: Set path to save Comics (Current: """ + current_root_path + """)
+        2: Set ComicVine API key (Current: """ + current_api_key + """)
 
         Q: Quit
 
