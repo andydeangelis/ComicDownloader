@@ -231,6 +231,7 @@ class GlobalFunctions:
         #existingComics = os.listdir(rootPath + "/" + folder)
         
         for link in findLinks:
+            print(link)
             try:
                 # Create the URL to the issue from the relative link on the page. the '&readType=1' 
                 # option specifies to show the full comic on one page.
