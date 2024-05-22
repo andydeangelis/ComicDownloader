@@ -229,14 +229,13 @@ class GlobalFunctions:
 
         # Get the list of already downloaded issues from file system. 
         #existingComics = os.listdir(rootPath + "/" + folder)
-
-        print(findLinks)
         
         for link in findLinks:
             try:
                 # Create the URL to the issue from the relative link on the page. the '&readType=1' 
                 # option specifies to show the full comic on one page.
                 comicLink = (link.get('href')).replace(" ","") 
+                print(comicLink)
 
                 # Set the name for the CBZ file.
                 cbz_name = (link.string).replace(":","").replace(" / ","").replace("/"," ").replace("-)",")").replace("%","")
