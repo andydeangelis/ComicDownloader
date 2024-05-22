@@ -586,12 +586,12 @@ class GlobalFunctions:
             with open(api_file) as f_in:
                 current_api_key = (json.load(f_in))['comic_api_key']
         
-        if not current_root_path:
+        if current_root_path is None:
             rootPath = 'ROOT PATH NOT SET'
         else:
             rootPath = current_root_path
         
-        if not current_api_key:
+        if current_api_key is None:
             APIKey = 'API KEY NOT SET'
         else:
             APIKey = current_api_key
