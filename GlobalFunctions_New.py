@@ -221,12 +221,11 @@ class GlobalFunctions:
         findLinks = []
 
         for link in links:
-            print("start for loop")
-            try:
+            #try:
                 if "/comic/" in link.get('href'):
                     findLinks.append(link)
-            except EnvironmentError as e:
-                print(e)
+            #except EnvironmentError as e:
+            #    print(e)
 
         # Get the list of already downloaded issues from file system. 
         existingComics = os.listdir(rootPath + "/" + folder)
