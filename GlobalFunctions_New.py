@@ -624,48 +624,39 @@ class GlobalFunctions:
     def mainMenu():
         try:
             GlobalFunctions.cls()
+     
+            choice = input("""
+            ***PLEASE MAKE YOUR SELECTION***
 
-            config_file = Path("/data/comic_path_config.json")
-            if config_file.is_file():
-                with open(config_file) as f_in:
-                    current_root_path = (json.load(f_in))['comic_dir']
+            1: Run batch downloader
+            2: Add/Remove Comics
+            3. Check single comic from existing list
+
+            M: Update all comic Metadata
             
-            if current_root_path is None:
-                GlobalFunctions.set_comic_config()
+            Q: Quit
+
+            S: Modify Settings
+
+            Please enter your choice: """)
+
+            if choice == "1":
+                GlobalFunctions.comicDownload()
+            elif choice == "2":
+                GlobalFunctions.addRemoveComicMenu()
+            elif choice == "3":
+                GlobalFunctions.single_comic_download()
+            elif choice == "M" or choice =="m":
+                GlobalFunctions.scanComicMetadata()
+            elif choice=="Q" or choice=="q":
+                GlobalFunctions.cls()
+                sys.exit
+            elif choice == "S" or choice == "s":
+                GlobalFunctions.modifySettingsMenu()
             else:
-                
-                choice = input("""
-                ***PLEASE MAKE YOUR SELECTION***
-
-                1: Run batch downloader
-                2: Add/Remove Comics
-                3. Check single comic from existing list
-
-                M: Update all comic Metadata
-                
-                Q: Quit
-
-                S: Modify Settings
-
-                Please enter your choice: """)
-
-                if choice == "1":
-                    GlobalFunctions.comicDownload()
-                elif choice == "2":
-                    GlobalFunctions.addRemoveComicMenu()
-                elif choice == "3":
-                    GlobalFunctions.single_comic_download()
-                elif choice == "M" or choice =="m":
-                    GlobalFunctions.scanComicMetadata()
-                elif choice=="Q" or choice=="q":
-                    GlobalFunctions.cls()
-                    sys.exit
-                elif choice == "S" or choice == "s":
-                    GlobalFunctions.modifySettingsMenu()
-                else:
-                    print("You must only select a valid entry.")
-                    print("Please try again")
-                    GlobalFunctions.mainMenu()
+                print("You must only select a valid entry.")
+                print("Please try again")
+                GlobalFunctions.mainMenu()
         except EnvironmentError as e:
             print(e)
         
