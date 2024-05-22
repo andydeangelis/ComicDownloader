@@ -56,7 +56,7 @@ class GlobalFunctions:
     def set_api_key():
         GlobalFunctions.cls()
 
-        comic_api_file = "/data/comic_api.json"
+        comic_api_file = "/data/comicvine_api_key.json"
 
         try:            
             comicApiKey = input("Enter your ComicVine API key: ")
@@ -170,7 +170,7 @@ class GlobalFunctions:
         
         trackerJsonFile = '/data/comic_tracker.json'
         comic_path_config = "/data/comic_path_config.json"
-        comic_api_file = "/data/comic_api.json"
+        comic_api_file = "/data/comicvine_api_key.json"
 
         #Get root directory
         with open(comic_path_config, 'r') as rootPath:
@@ -362,7 +362,7 @@ class GlobalFunctions:
 
         trackerJsonFile = '/data/comic_tracker.json'
         comic_path_config = "/data/comic_path_config.json"
-        comic_api_file = "/data/comic_api.json"
+        comic_api_file = "/data/comicvine_api_key.json"
 
         #Get root directory
         with open(comic_path_config, 'r') as rootPath:
