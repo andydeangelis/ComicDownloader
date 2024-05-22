@@ -231,7 +231,6 @@ class GlobalFunctions:
         #existingComics = os.listdir(rootPath + "/" + folder)
         
         for link in findLinks:
-            print(link)
             try:
                 # Create the URL to the issue from the relative link on the page. the '&readType=1' 
                 # option specifies to show the full comic on one page.
@@ -240,6 +239,7 @@ class GlobalFunctions:
                 # Set the name for the CBZ file.
                 cbz_name = (link.string).replace(":","").replace(" / ","").replace("/"," ").replace("-)",")").replace("%","")
                 fileExists = Path(rootPath + "/" + folder + "/" + cbz_name + ".cbz")
+                print(rootPath + "/" + folder + "/" + cbz_name + ".cbz")
                 
                 # If the link exists, continue to the next issue. If not, download the issue.
                 if fileExists.is_file:
