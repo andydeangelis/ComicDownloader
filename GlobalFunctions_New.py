@@ -161,6 +161,8 @@ class GlobalFunctions:
                 }
                 with open(trackerJsonFile,'w') as file:
                     json.dump(newComicData, file, ensure_ascii=False, indent=4)
+            
+            GlobalFunctions.mainMenu()
 
         except EnvironmentError as e:
             print(e)
