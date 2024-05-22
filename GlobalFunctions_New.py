@@ -227,9 +227,8 @@ class GlobalFunctions:
             except EnvironmentError as e:
                 print(e)
 
-        print ("end for link loop")
         # Get the list of already downloaded issues from file system. 
-        existingComics = os.listdir(rootPath + "/" + folder)
+        #existingComics = os.listdir(rootPath + "/" + folder)
         
         for link in findLinks:
             try:
