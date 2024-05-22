@@ -229,6 +229,8 @@ class GlobalFunctions:
 
         # Get the list of already downloaded issues from file system. 
         #existingComics = os.listdir(rootPath + "/" + folder)
+
+        print(findLinks)
         
         for link in findLinks:
             try:
@@ -322,8 +324,8 @@ class GlobalFunctions:
                     
                     GlobalFunctions.generateMetadata(fullComicPath,apiKey)
     
-            except sqlite3.IntegrityError:
-                print('ERROR') 
+            except EnvironmentError as e:
+                print(e)
 
     def generateMetadata(comicFile,apiKey):
         subprocess.Popen([r'comictagger','--cv-api-key', apiKey, '-f', comicFile, '-o', '-s', '-t', 'CR', '-w'], cwd=os.getcwd())
