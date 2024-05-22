@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from genericpath import isfile
+from pathlib import Path
 import os
 import sys
 from GlobalFunctions_New import GlobalFunctions
