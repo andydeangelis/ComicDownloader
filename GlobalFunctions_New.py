@@ -366,14 +366,10 @@ class GlobalFunctions:
 
                     if configExists.is_file():
 
-                        comicFolder = searchSelectData.replace("-"," ")
-                        if comicFolder[comicFolder.__len__() -1] == ' ':
-                            comicFolder = comicFolder[:-1]
-
                         newComicData = {
-                            "comicUrl": 'https://readcomicsonline.ru/comic/' + searchSelectData,
-                            "value": searchSelectValue,
-                            "folder": comicFolder
+                            "comicUrl": comic["comicUrl"],
+                            "value": comic["value"],
+                            "folder": comic["folder"]
                         }
 
                         with open (trackerJsonFile, 'r+') as file:
@@ -398,9 +394,9 @@ class GlobalFunctions:
                     newComicData = {
                         "trackedComics":[
                             {
-                                "comicUrl": 'https://readcomicsonline.ru/comic/' + searchSelectData,
-                                "value": searchSelectValue,
-                                "folder": comicFolder
+                                "comicUrl": comic["comicUrl"],
+                                "value": comic["value"],
+                                "folder": comic["folder"]
                             }
                         ]
                     }
