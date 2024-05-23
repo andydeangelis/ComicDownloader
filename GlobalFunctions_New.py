@@ -142,10 +142,11 @@ class GlobalFunctions:
 
                 with open (trackerJsonFile, 'r+') as file:
                     file_content = json.load(file)
+                    value_exists = False
                     for val in file_content["trackedComics"]:
                         if val["value"] == newComicData["value"]:
                             value_exists = True
-                    if value_exists:
+                    if value_exists == True:
                         print("Comic already exists in tracked list.")
                         input("Press any key to return to the main menu.")
                         GlobalFunctions.mainMenu()                            
@@ -333,7 +334,7 @@ class GlobalFunctions:
                 print(e)
 
         GlobalFunctions.mainMenu()
-        
+
     def generateMetadata(comicFile,apiKey):
         subprocess.Popen([r'comictagger','--cv-api-key', apiKey, '-f', comicFile, '-o', '-s', '-t', 'CR', '-w'], cwd=os.getcwd())
 
