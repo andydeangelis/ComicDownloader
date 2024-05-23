@@ -144,13 +144,15 @@ class GlobalFunctions:
                     file_content = json.load(file)
                     for val in file_content["trackedComics"]:
                         if val["value"] == newComicData["value"]:
-                            print("Comic already exists in tracked list.")
-                            input("Press any key to return to the main menu.")
-                            GlobalFunctions.mainMenu()                            
-                        else:
-                            file_content["trackedComics"].append(newComicData)
-                            file.seek(0)
-                            json.dump(file_content, file, ensure_ascii=False, indent=4)
+                            value_exists = True
+                    if value_exists:
+                        print("Comic already exists in tracked list.")
+                        input("Press any key to return to the main menu.")
+                        GlobalFunctions.mainMenu()                            
+                    else:
+                        file_content["trackedComics"].append(newComicData)
+                        file.seek(0)
+                        json.dump(file_content, file, ensure_ascii=False, indent=4)
             else:
                 comicFolder = searchSelectData.replace("-"," ")
                 if comicFolder[comicFolder.__len__() -1] == ' ':
