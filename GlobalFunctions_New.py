@@ -251,8 +251,6 @@ class GlobalFunctions:
                 
                 # If the link exists, continue to the next issue. If not, download the issue.
                 if not fileExists.is_file() and not fileExists2.is_file():
-                    print(link.string)
-                    """
                     
                     # Create our sesion to the issue and get the encoded html.               
                     comicChapterPage = sess.get(comicLink, headers=headers)
@@ -330,10 +328,12 @@ class GlobalFunctions:
                     os.chmod(fullComicPath, 0o0777)
                     
                     GlobalFunctions.generateMetadata(fullComicPath,apiKey)
-                    """
     
             except EnvironmentError as e:
                 print(e)
+
+        GlobalFunctions.mainMenu()
+        
     def generateMetadata(comicFile,apiKey):
         subprocess.Popen([r'comictagger','--cv-api-key', apiKey, '-f', comicFile, '-o', '-s', '-t', 'CR', '-w'], cwd=os.getcwd())
 
