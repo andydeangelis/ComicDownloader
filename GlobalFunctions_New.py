@@ -339,8 +339,34 @@ class GlobalFunctions:
         process = subprocess.Popen([r'comictagger','--comicvine-key', apiKey, '-f', comicFile, '-o', '-s', '-q', '--no-summary', '-t', 'CR', '--type-modify', 'CR', '--no-gui'], cwd=os.getcwd())
         process.wait()
 
-    def remove_comic():
-        GlobalFunctions.cls()        
+    def remove_comic(comic):
+        GlobalFunctions.cls()
+
+        input(comic["comicUrl"]) 
+
+    def remove_comic_menu():
+        trackerJsonFile = '/data/comic_tracker.json'
+        
+        #Get the current list of comics
+        with open (trackerJsonFile, 'r') as file:
+            comicList = (json.load(file)  )['trackedComics']
+        
+        i = 1
+
+        for row in comicList:
+            listNum = str(i)
+            print(listNum + ". " + row['value'])
+            i = i+1
+
+        try:
+            comicToRemove = (int(input ("Enter number of comic to remove from tracker: ")))
+            removeComic = comicList[(comicToRemove - 1)]
+                            
+            GlobalFunctions.remove_comic(removeComic)
+
+        except ValueError:
+            GlobalFunctions.addRemoveComicMenu()
+            
            
     def single_comic_download():
         GlobalFunctions.cls()
