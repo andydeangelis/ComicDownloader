@@ -391,7 +391,7 @@ class GlobalFunctions:
             checkComic = comicList[(comicToCheck - 1)]
                             
             GlobalFunctions.pullComic(checkComic,comic_root_path,comicvine_api_key)
-            GlobalFunctions.single_comic_download()
+            #GlobalFunctions.single_comic_download()
 
         except ValueError:
             GlobalFunctions.addRemoveComicMenu()
