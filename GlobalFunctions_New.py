@@ -336,7 +336,7 @@ class GlobalFunctions:
         GlobalFunctions.mainMenu()
 
     def generateMetadata(comicFile,apiKey):
-        subprocess.Popen([r'comictagger','--comicvine-key', apiKey, '-f', comicFile, '-o', '-s', '-t', 'CR'], cwd=os.getcwd())
+        subprocess.Popen([r'comictagger','--comicvine-key', apiKey, '-f', comicFile, '-o', '-s', '-q', '--no-summary', '-t', 'CR', '--type-modify', 'CR', '--no-gui'], cwd=os.getcwd())
 
     def remove_comic():
         GlobalFunctions.cls()        
