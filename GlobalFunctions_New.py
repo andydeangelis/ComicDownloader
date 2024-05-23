@@ -196,6 +196,7 @@ class GlobalFunctions:
             allComics = (json.load(file)  )['trackedComics']
 
         for comic in tqdm(allComics):
+            print(comic['comicUrl'])
             GlobalFunctions.pullComic(comic,comic_root_path,comicvine_api_key)
 
         print("Sleeping for 20 seconds to finish metadata lookup.")
