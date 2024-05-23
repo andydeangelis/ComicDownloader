@@ -18,6 +18,6 @@ RUN cd / && git clone 'https://github.com/comictagger/comictagger.git'
 RUN cd /comictagger && git switch develop
 #RUN pip install -r /comictagger/requirements_dev.txt
 RUN cd /comictagger && python setup.py install
-RUN cd /comictagger && pip install .[ICU,7Z] 
+RUN cd /comictagger && pip install .[ICU,7Z,CBR] 
 
 ENTRYPOINT ["python", "/ComicDownloader/__main__.py"]
