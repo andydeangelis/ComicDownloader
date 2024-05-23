@@ -345,6 +345,7 @@ class GlobalFunctions:
         input(comic["comicUrl"]) 
 
     def remove_comic_menu():
+
         trackerJsonFile = '/data/comic_tracker.json'
         
         #Get the current list of comics
@@ -511,7 +512,7 @@ class GlobalFunctions:
         if choice == "1":
             GlobalFunctions.comicSearch()
         elif choice == "2":
-            GlobalFunctions.remove_comic()
+            GlobalFunctions.remove_comic_menu()
         elif choice=="Q" or choice=="q":
             GlobalFunctions.cls()
             sys.exit
