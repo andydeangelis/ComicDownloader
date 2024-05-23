@@ -238,6 +238,8 @@ class GlobalFunctions:
                 
                 # Set the name for the CBZ file.
                 cbz_name = (link.string).replace(":","").replace(" / ","").replace("/"," ").replace("-)",")").replace("%","")
+                print(cbz_name)
+                """
                 fileExists = Path(rootPath + "/" + folder + "/" + cbz_name + ".cbz")
                 fileExists2 = Path(rootPath + "/" + value + "/" + cbz_name + ".cbz")
                 
@@ -320,10 +322,10 @@ class GlobalFunctions:
                     os.chmod(fullComicPath, 0o0777)
                     
                     GlobalFunctions.generateMetadata(fullComicPath,apiKey)
+                    """
     
             except EnvironmentError as e:
                 print(e)
-
     def generateMetadata(comicFile,apiKey):
         subprocess.Popen([r'comictagger','--cv-api-key', apiKey, '-f', comicFile, '-o', '-s', '-t', 'CR', '-w'], cwd=os.getcwd())
 
