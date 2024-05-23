@@ -339,35 +339,7 @@ class GlobalFunctions:
         subprocess.Popen([r'comictagger','--cv-api-key', apiKey, '-f', comicFile, '-o', '-s', '-t', 'CR', '-w'], cwd=os.getcwd())
 
     def remove_comic():
-        GlobalFunctions.cls()
-
-        #Create connections to database
-        conn = sqlite3.connect("/data/comicDatabase.db")
-        cur = conn.cursor()
-
-        #Get the current list of comics
-        comicListQuery = 'SELECT * from _comicURLs WHERE tracked == 1'
-        cur.execute(comicListQuery)
-        comicList = cur.fetchall()
-
-        i = 1
-
-        for row in comicList:
-            listNum = str(i)
-            print(listNum + ". " + row[2])
-            i = i+1
-        
-        try:
-            comicToRemove = (int(input ("Enter number of comic to remove from queue (this will not remove history): ")))
-            removeComic = comicList[(comicToRemove - 1)][1]
-            dropComicSql = "UPDATE _comicURLs SET tracked = 0 WHERE link is " + "'" + removeComic + "'"
-            cur.execute(dropComicSql)
-            conn.commit()
-            GlobalFunctions.addRemoveComicMenu()
-        except ValueError:
-            GlobalFunctions.addRemoveComicMenu()
-              
-        conn.close()
+        GlobalFunctions.cls()        
            
     def single_comic_download():
         GlobalFunctions.cls()
