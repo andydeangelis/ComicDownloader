@@ -145,7 +145,8 @@ class GlobalFunctions:
                     for val in file_content["trackedComics"]:
                         if val["value"] == newComicData["value"]:
                             print("Comic already exists in tracked list.")
-                            input("Press any key to return to the main menu.")                            
+                            input("Press any key to return to the main menu.")
+                            GlobalFunctions.mainMenu()                            
                         else:
                             file_content["trackedComics"].append(newComicData)
                             file.seek(0)
