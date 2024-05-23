@@ -176,7 +176,7 @@ class GlobalFunctions:
         except EnvironmentError as e:
             print(e)
     
-    def comicDownload():
+    def batchComicDownload():
         GlobalFunctions.cls()
         
         trackerJsonFile = '/data/comic_tracker.json'
@@ -334,8 +334,6 @@ class GlobalFunctions:
             except EnvironmentError as e:
                 print(e)
 
-        GlobalFunctions.mainMenu()
-
     def generateMetadata(comicFile,apiKey):
         process = subprocess.Popen([r'comictagger','--comicvine-key', apiKey, '-f', comicFile, '-o', '-s', '-q', '--no-summary', '-t', 'CR', '--type-modify', 'CR', '--no-gui'], cwd=os.getcwd())
         process.wait()
@@ -447,6 +445,8 @@ class GlobalFunctions:
 
         except ValueError:
             GlobalFunctions.addRemoveComicMenu()
+
+        GlobalFunctions.mainMenu()
         
     def scanComicMetadata():
         GlobalFunctions.cls()
@@ -628,7 +628,7 @@ class GlobalFunctions:
             Please enter your choice: """)
 
             if choice == "1":
-                GlobalFunctions.comicDownload()
+                GlobalFunctions.batchComicDownload()
             elif choice == "2":
                 GlobalFunctions.addRemoveComicMenu()
             elif choice == "3":
