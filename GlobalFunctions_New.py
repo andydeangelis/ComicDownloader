@@ -387,10 +387,6 @@ class GlobalFunctions:
                                 file.seek(0)
                                 json.dump(file_content, file, ensure_ascii=False, indent=4)
                 else:
-                    comicFolder = searchSelectData.replace("-"," ")
-                    if comicFolder[comicFolder.__len__() -1] == ' ':
-                        comicFolder = comicFolder[:-1]
-
                     newComicData = {
                         "trackedComics":[
                             {
