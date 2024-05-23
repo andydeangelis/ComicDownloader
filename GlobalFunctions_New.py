@@ -358,11 +358,60 @@ class GlobalFunctions:
             comicToRemove = (int(input ("Enter number of comic to remove from tracker: ")))
             selectedComic = comicList[(comicToRemove - 1)]
 
+            os.remove(trackerJsonFile)
+            
+            for comic in comicList:
+                configExists = Path(trackerJsonFile)
+                if comic["comicUrl"] != selectedComic["comicUrl"]:
+
+                    if configExists.is_file():
+
+                        comicFolder = searchSelectData.replace("-"," ")
+                        if comicFolder[comicFolder.__len__() -1] == ' ':
+                            comicFolder = comicFolder[:-1]
+
+                        newComicData = {
+                            "comicUrl": 'https://readcomicsonline.ru/comic/' + searchSelectData,
+                            "value": searchSelectValue,
+                            "folder": comicFolder
+                        }
+
+                        with open (trackerJsonFile, 'r+') as file:
+                            file_content = json.load(file)
+                            value_exists = False
+                            for val in file_content["trackedComics"]:
+                                if val["value"] == newComicData["value"]:
+                                    value_exists = True
+                            if value_exists == True:
+                                print("Comic already exists in tracked list.")
+                                input("Press any key to return to the main menu.")
+                                GlobalFunctions.mainMenu()                            
+                            else:
+                                file_content["trackedComics"].append(newComicData)
+                                file.seek(0)
+                                json.dump(file_content, file, ensure_ascii=False, indent=4)
+                else:
+                    comicFolder = searchSelectData.replace("-"," ")
+                    if comicFolder[comicFolder.__len__() -1] == ' ':
+                        comicFolder = comicFolder[:-1]
+
+                    newComicData = {
+                        "trackedComics":[
+                            {
+                                "comicUrl": 'https://readcomicsonline.ru/comic/' + searchSelectData,
+                                "value": searchSelectValue,
+                                "folder": comicFolder
+                            }
+                        ]
+                    }
+                    with open(trackerJsonFile,'w') as file:
+                        json.dump(newComicData, file, ensure_ascii=False, indent=4)
+
             GlobalFunctions.cls()
 
             print(selectedComic["comicUrl"])
             print("Comic " + selectedComic["value"] + " successfully removed!")
-            input("Press any key to return to the main menu.")
+            input("Press any key to return to the main menu...")
 
             GlobalFunctions.mainMenu()
 
