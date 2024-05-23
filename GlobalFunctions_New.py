@@ -358,7 +358,13 @@ class GlobalFunctions:
             comicToRemove = (int(input ("Enter number of comic to remove from tracker: ")))
             selectedComic = comicList[(comicToRemove - 1)]
 
-            input(selectedComic["comicUrl"]) 
+            GlobalFunctions.cls()
+
+            print(selectedComic["comicUrl"])
+            print("Comic " + selectedComic["value"] + " successfully removed!")
+            input("Press any key to return to the main menu.")
+
+            GlobalFunctions.mainMenu()
 
         except ValueError:
             GlobalFunctions.addRemoveComicMenu()
