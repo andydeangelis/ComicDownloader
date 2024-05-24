@@ -580,7 +580,7 @@ class GlobalFunctions:
             elif choice == "3":
                 GlobalFunctions.single_comic_download()
             elif choice == "M" or choice =="m":
-                GlobalFunctions.scanComicMetadata()
+                GlobalFunctions.batchScanComicMetadata()
             elif choice=="Q" or choice=="q":
                 GlobalFunctions.cls()
                 sys.exit
