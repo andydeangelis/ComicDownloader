@@ -198,7 +198,7 @@ class GlobalFunctions:
         for comic in tqdm(allComics):
             GlobalFunctions.pullComic(comic,comic_root_path,comicvine_api_key)
 
-        print("Sleeping for 20 seconds to finish metadata lookup.")        
+        GlobalFunctions.mainMenu()  
 
     def pullComic(comic,rootPath,apiKey):
 
