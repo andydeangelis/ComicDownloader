@@ -19,7 +19,8 @@ args = parser.parse_args()
 
 if __name__ == "__main__":
     if args.silent:
-        GlobalFunctions.batchComicDownload("silent")
+        batchMode = "silent"
+        GlobalFunctions.batchComicDownload(batchMode)
     else:
         
         config_file = Path("/data/comic_path_config.json")
