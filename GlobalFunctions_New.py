@@ -176,7 +176,7 @@ class GlobalFunctions:
         except EnvironmentError as e:
             print(e)
     
-    def batchComicDownload():
+    def batchComicDownload(batchMode):
         GlobalFunctions.cls()
         
         trackerJsonFile = '/data/comic_tracker.json'
@@ -198,7 +198,10 @@ class GlobalFunctions:
         for comic in tqdm(allComics):
             GlobalFunctions.pullComic(comic,comic_root_path,comicvine_api_key)
 
-        GlobalFunctions.mainMenu()  
+        if mode == "interactive":
+            GlobalFunctions.mainMenu()
+        else:
+            print("Silent batch download completed.")
 
     def pullComic(comic,rootPath,apiKey):
 
@@ -626,7 +629,8 @@ class GlobalFunctions:
             Please enter your choice: """)
 
             if choice == "1":
-                GlobalFunctions.batchComicDownload()
+                batchMode = "interactive"
+                GlobalFunctions.batchComicDownload(batchMode)
             elif choice == "2":
                 GlobalFunctions.addRemoveComicMenu()
             elif choice == "3":
