@@ -198,7 +198,7 @@ class GlobalFunctions:
         for comic in tqdm(allComics):
             GlobalFunctions.pullComic(comic,comic_root_path,comicvine_api_key)
 
-        if mode == "interactive":
+        if batchMode == "interactive":
             GlobalFunctions.mainMenu()
         else:
             print("Silent batch download completed.")
