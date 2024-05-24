@@ -449,80 +449,24 @@ class GlobalFunctions:
 
         GlobalFunctions.mainMenu()
         
-    def scanComicMetadata():
+    def batchScanComicMetadata():
         GlobalFunctions.cls()
 
-        choice = input("""
-        ***PLEASE MAKE YOUR SELECTION***
+        comic_path_config = "/data/comic_path_config.json"
 
-        F: Find a comic in current tracked list
-
-        Q: Quit
-
-        M: Main Menu
-
-        Please enter your choice: """)
+        #Get root directory
+        with open(comic_path_config, 'r') as rootPath:
+            comic_root_path = (json.load(rootPath))['comic_dir']
         
-        if choice == "F" or choice =="f":
-            search = input("Enter search criteria: ")
-            search = search.replace(" ","%")
-                            
-            conn = sqlite3.connect("/data/comicDatabase.db")
-            cur = conn.cursor()
-
-            #Get the current list of comics
-            comicListQuery = 'SELECT * from _comicURLs WHERE tracked == 1 and name like' + "'%" + search + "%' COLLATE NOCASE"
-            cur.execute(comicListQuery)
-            comicList = cur.fetchall()
-
-            i = 1
-
-            for row in comicList:
-                listNum = str(i)
-                print(listNum + ". " + row[2])
-                i = i+1
-
-            try:
-                comicToCheck = (int(input ("Enter number of comic to check for updates: ")))
-                checkComic = comicList[(comicToCheck - 1)]
+        try:
+            for file in sorted(os.listdir(comic_root_path)):
+                filePath = comic_root_path + "/" + file
+                out = check_output(['comictagger',filePath, '-p', '-t', 'CR',])
+                if "title" not in out.decode("utf-8"):
+                    print(filePath)
                                 
-                root_path_query = "SELECT * FROM _config"
-                cur.execute(root_path_query)
-                root_path = cur.fetchall()
-
-                for rootRow in root_path:
-                    rootPath = rootRow[0]
-                    apiKey = rootRow[1]
-
-                path = rootPath + "/" + checkComic[2]
-                                                
-                for root, dirs, files in os.walk(path):
-                    for file in files:
-                        if(file.endswith(".cbz")):
-                            comicFile = os.path.join(root,file)
-                            print(comicFile)
-                            zip_file = ZipFile(comicFile,'r')
-                            if 'ComicInfo.xml' not in zip_file.namelist():
-                                print("Attempting to gather metadata for " + comicFile + " ...")
-                                GlobalFunctions.generateMetadata(comicFile,apiKey)
-                                time.sleep(10)
-                            else:
-                                print("Updating metadata for " + comicFile + " ...")
-                                GlobalFunctions.generateMetadata(comicFile,apiKey)
-                                time.sleep(10)
-
-            except ValueError:
-                GlobalFunctions.addRemoveComicMenu()
-
-        elif choice=="Q" or choice=="q":
-            GlobalFunctions.cls()
-            sys.exit
-        elif choice == "M" or choice == "m":
-            GlobalFunctions.mainMenu()
-        else:
-            print("You must only select a valid entry.")
-            print("Please try again")
-            GlobalFunctions.mainMenu()
+        except ValueError:
+            GlobalFunctions.addRemoveComicMenu()
         
         #GlobalFunctions.mainMenu()
 
