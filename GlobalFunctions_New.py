@@ -459,11 +459,12 @@ class GlobalFunctions:
             comic_root_path = (json.load(rootPath))['comic_dir']
         
         try:
-            for file in sorted(os.listdir(comic_root_path)):
-                filePath = comic_root_path + "/" + file
-                out = subprocess.check_output(['comictagger',filePath, '-p', '-t', 'CR',])
-                if "title" not in out.decode("utf-8"):
-                    print(filePath)
+            for dir in sorted(os.listdir(comic_root_path)):
+                for file in sorted(os.listdir(dir)):
+                    filePath = comic_root_path + "/" + file
+                    out = subprocess.check_output(['comictagger',filePath, '-p', '-t', 'CR',])
+                    if "title" not in out.decode("utf-8"):
+                        print(filePath)
                                 
         except ValueError:
             GlobalFunctions.addRemoveComicMenu()
