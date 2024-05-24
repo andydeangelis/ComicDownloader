@@ -461,7 +461,7 @@ class GlobalFunctions:
         try:
             for dir in sorted(os.listdir(comic_root_path)):
                 comicDir = comic_root_path + "/" + dir
-                for file in sorted(os.listdir(dir)):
+                for file in sorted(os.listdir(comicDir)):
                     filePath = comicDir + "/" + file
                     out = subprocess.check_output(['comictagger',filePath, '-p', '-t', 'CR',])
                     if "title" not in out.decode("utf-8"):
