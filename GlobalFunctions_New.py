@@ -463,9 +463,10 @@ class GlobalFunctions:
                 comicDir = comic_root_path + "/" + dir
                 for file in sorted(os.listdir(comicDir)):
                     filePath = comicDir + "/" + file
-                    out = subprocess.check_output(['comictagger',filePath, '-p', '-t', 'CR',])
-                    if "title" not in out.decode("utf-8"):
-                        print(filePath)
+                    if filePath.endswith('.cbz'):
+                        out = subprocess.check_output(['comictagger',filePath, '-p', '-t', 'CR',])
+                        if "title" not in out.decode("utf-8"):
+                            print(filePath)
                                 
         except ValueError:
             GlobalFunctions.addRemoveComicMenu()
