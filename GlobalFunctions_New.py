@@ -472,8 +472,7 @@ class GlobalFunctions:
                         out = subprocess.check_output(['comictagger',filePath, '-p', '-t', 'CR',])
                         if "title" not in out.decode("utf-8"):
                             print(filePath)
-                            print(type(filePath))
-                            #GlobalFunctions.generateMetadata(filePath,apiKey)
+                            GlobalFunctions.generateMetadata(filePath,comicvine_api_key)
                                 
         except ValueError as e:
             print(e)
