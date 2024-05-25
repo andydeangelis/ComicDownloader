@@ -453,10 +453,15 @@ class GlobalFunctions:
         GlobalFunctions.cls()
 
         comic_path_config = "/data/comic_path_config.json"
+        comic_api_file = "/data/comicvine_api_key.json"
 
         #Get root directory
         with open(comic_path_config, 'r') as rootPath:
             comic_root_path = (json.load(rootPath))['comic_dir']
+
+        #Get ComicVine API key
+        with open(comic_api_file, 'r') as apiKey:
+            comicvine_api_key = (json.load(apiKey))['comic_api_key']
         
         try:
             for dir in sorted(os.listdir(comic_root_path)):
@@ -467,9 +472,10 @@ class GlobalFunctions:
                         out = subprocess.check_output(['comictagger',filePath, '-p', '-t', 'CR',])
                         if "title" not in out.decode("utf-8"):
                             print(filePath)
+                            #GlobalFunctions.generateMetadata(filePath,apiKey)
                                 
-        except ValueError:
-            GlobalFunctions.addRemoveComicMenu()
+        except ValueError as e:
+            print(e)
         
         #GlobalFunctions.mainMenu()
 
