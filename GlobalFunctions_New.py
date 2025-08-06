@@ -386,9 +386,9 @@ class GlobalFunctions:
                     newComicData = {
                         "trackedComics":[
                             {
-                                "comicUrl": 'https://readcomicsonline.ru/comic/' + searchSelectData,
-                                "value": searchSelectValue,
-                                "folder": comicFolder
+                                "comicUrl": comic["comicUrl"],
+                                "value": comic["value"],
+                                "folder": comic["folder"]
                             }
                         ]
                     }
