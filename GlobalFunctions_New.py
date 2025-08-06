@@ -354,8 +354,8 @@ class GlobalFunctions:
             input("Press any key to return to the main menu...")
             return GlobalFunctions.mainMenu()
     
-         #Get the current list of comics
-         with open (trackerJsonFile, 'r') as file:
+        #Get the current list of comics
+        with open (trackerJsonFile, 'r') as file:
             comicList = (json.load(file)  )['trackedComics']
         
         try:
