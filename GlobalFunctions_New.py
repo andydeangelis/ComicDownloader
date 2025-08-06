@@ -363,7 +363,7 @@ class GlobalFunctions:
             comicToRemove = (int(input ("Enter number of comic to remove from tracker: ")))
             selectedComic = comicList[(comicToRemove - 1)]
 
-            comicList.pop(selectedComic)
+            comicList.pop((comicToRemove - 1))
 
             for comic in comicList:                
                 file_content["trackedComics"].append(comic)
