@@ -373,16 +373,28 @@ class GlobalFunctions:
             if os.path.exists(trackerJsonFile):
                 os.remove(trackerJsonFile)
             
-            with open(trackerJsonFile, 'w') as fp:
-                pass
-                fp.close()
-                
-            for comic in comicList:                
-                with open (trackerJsonFile, 'r+') as file:
-                    file_content = json.load(file)                                
-                    file_content["trackedComics"].append(comic)
-                    file.seek(0)
-                    json.dump(file_content, file, ensure_ascii=False, indent=4)
+            for comic in comicList:
+                 configExists = Path(trackerJsonFile)
+
+                if configExists.is_file():
+                    with open (trackerJsonFile, 'r+') as file:
+                        file_content = json.load(file)                                
+                        file_content["trackedComics"].append(comic)
+                        file.seek(0)
+                        json.dump(file_content, file, ensure_ascii=False, indent=4)
+                else:
+                    newComicData = {
+                        "trackedComics":[
+                            {
+                                "comicUrl": 'https://readcomicsonline.ru/comic/' + searchSelectData,
+                                "value": searchSelectValue,
+                                "folder": comicFolder
+                            }
+                        ]
+                    }
+                    
+                    with open(trackerJsonFile,'w') as file:
+                        json.dump(newComicData, file, ensure_ascii=False, indent=4)
                 
             GlobalFunctions.cls()
 
