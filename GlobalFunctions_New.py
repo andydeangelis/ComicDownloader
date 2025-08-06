@@ -469,7 +469,7 @@ class GlobalFunctions:
         ***PLEASE MAKE YOUR SELECTION***
 
         1: Search for Comic to Add
-        2: Remove Comic from tracker (NOT WORKING)
+        2: Remove Comic from tracker
         
         Q: Quit
 
@@ -480,7 +480,7 @@ class GlobalFunctions:
         if choice == "1":
             GlobalFunctions.comicSearch()
         elif choice == "2":
-            GlobalFunctions.addRemoveComicMenu()
+            GlobalFunctions.remove_comic()
         elif choice=="Q" or choice=="q":
             GlobalFunctions.cls()
             sys.exit
