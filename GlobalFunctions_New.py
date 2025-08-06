@@ -343,6 +343,10 @@ class GlobalFunctions:
 
         trackerJsonFile = '/data/comic_tracker.json'
         trackerBackupFile = '/data/comic_tracker_backup.json'
+
+        if os.path.exists(trackerBackupFile):
+            os.remove(trackerBackupFile)
+        shutil.copy(trackerJsonFile, trackerBackupFile)
         
         #Get the current list of comics
         with open (trackerJsonFile, 'r') as file:
@@ -359,50 +363,13 @@ class GlobalFunctions:
             comicToRemove = (int(input ("Enter number of comic to remove from tracker: ")))
             selectedComic = comicList[(comicToRemove - 1)]
 
-            if os.path.exists(trackerBackupFile):
-                os.remove(trackerBackupFile)
-            shutil.copy(trackerJsonFile, trackerBackupFile)
-            os.remove(trackerJsonFile)
+            comicList.pop(selectedComic)
 
-            for comic in comicList:
-                configExists = Path(trackerJsonFile)
-                if comic["comicUrl"] != selectedComic["comicUrl"]:
-
-                    if configExists.is_file():
-
-                        newComicData = {
-                            "comicUrl": comic["comicUrl"],
-                            "value": comic["value"],
-                            "folder": comic["folder"]
-                        }
-
-                        with open (trackerJsonFile, 'r+') as file:
-                            file_content = json.load(file)
-                            value_exists = False
-                            for val in file_content["trackedComics"]:
-                                if val["value"] == newComicData["value"]:
-                                    value_exists = True
-                            if value_exists == True:
-                                print("Comic already exists in tracked list.")
-                                input("Press any key to return to the main menu.")
-                                GlobalFunctions.mainMenu()                            
-                            else:
-                                file_content["trackedComics"].append(newComicData)
-                                file.seek(0)
-                                json.dump(file_content, file, ensure_ascii=False, indent=4)
-                else:
-                    newComicData = {
-                        "trackedComics":[
-                            {
-                                "comicUrl": comic["comicUrl"],
-                                "value": comic["value"],
-                                "folder": comic["folder"]
-                            }
-                        ]
-                    }
-                    with open(trackerJsonFile,'w') as file:
-                        json.dump(newComicData, file, ensure_ascii=False, indent=4)
-
+            for comic in comicList:                
+                file_content["trackedComics"].append(comic)
+                file.seek(0)
+                json.dump(file_content, file, ensure_ascii=False, indent=4)
+                
             GlobalFunctions.cls()
 
             print(selectedComic["comicUrl"])
