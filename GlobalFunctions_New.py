@@ -352,9 +352,10 @@ class GlobalFunctions:
             os.remove(trackerBackupFile)
             shutil.copy(trackerJsonFile, trackerBackupFile)
         else:
+            cls()
             print("No comics exist in tracker yet!")
             input("Press any key to return to the main menu...")
-            GlobalFunctions.mainMenu()
+            return GlobalFunctions.mainMenu()
         
         try:
             i = 1
