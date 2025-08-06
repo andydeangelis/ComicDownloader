@@ -375,6 +375,7 @@ class GlobalFunctions:
             
             with open(trackerJsonFile, 'w') as fp:
                 pass
+                fp.close()
                 
             for comic in comicList:                
                 with open (trackerJsonFile, 'r+') as file:
