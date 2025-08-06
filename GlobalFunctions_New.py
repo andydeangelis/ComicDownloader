@@ -344,18 +344,19 @@ class GlobalFunctions:
         trackerJsonFile = '/data/comic_tracker.json'
         trackerBackupFile = '/data/comic_tracker_backup.json'
 
-        #Get the current list of comics
-        with open (trackerJsonFile, 'r') as file:
-            comicList = (json.load(file)  )['trackedComics']
-
-        if os.path.exists(trackerBackupFile):
-            os.remove(trackerBackupFile)
-            shutil.copy(trackerJsonFile, trackerBackupFile)
+        if os.path.exists(trackerJsonFile):
+            if os.path.exists(trackerBackupFile):
+                os.remove(trackerBackupFile)
+                shutil.copy(trackerJsonFile, trackerBackupFile)
         else:
             GlobalFunctions.cls()
             print("No comics exist in tracker yet!")
             input("Press any key to return to the main menu...")
             return GlobalFunctions.mainMenu()
+    
+         #Get the current list of comics
+         with open (trackerJsonFile, 'r') as file:
+            comicList = (json.load(file)  )['trackedComics']
         
         try:
             i = 1
