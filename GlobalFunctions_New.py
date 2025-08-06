@@ -374,7 +374,7 @@ class GlobalFunctions:
                 os.remove(trackerJsonFile)
             
             for comic in comicList:
-                 configExists = Path(trackerJsonFile)
+                configExists = Path(trackerJsonFile)
 
                 if configExists.is_file():
                     with open (trackerJsonFile, 'r+') as file:
