@@ -370,6 +370,9 @@ class GlobalFunctions:
             selectedComic = comicList[(comicToRemove - 1)]
 
             comicList.pop((comicToRemove - 1))
+            with open(trackerJsonFile,'r+') as file:
+                file.seek(0)
+                file.truncate()
             
             for comic in comicList:                
                 with open (trackerJsonFile, 'r+') as file:
