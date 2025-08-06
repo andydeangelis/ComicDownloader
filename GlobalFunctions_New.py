@@ -372,7 +372,6 @@ class GlobalFunctions:
             comicList.pop((comicToRemove - 1))
             with open(trackerJsonFile,'w') as file:
                 pass
-                file.close()
 
             for comic in comicList:                
                 with open (trackerJsonFile, 'r+') as file:
