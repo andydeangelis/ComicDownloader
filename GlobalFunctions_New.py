@@ -342,6 +342,7 @@ class GlobalFunctions:
     def remove_comic():
 
         trackerJsonFile = '/data/comic_tracker.json'
+        trackerBackupFile = '/data/comic_tracker_backup.json'
         
         #Get the current list of comics
         with open (trackerJsonFile, 'r') as file:
@@ -358,8 +359,11 @@ class GlobalFunctions:
             comicToRemove = (int(input ("Enter number of comic to remove from tracker: ")))
             selectedComic = comicList[(comicToRemove - 1)]
 
+            if os.path.exists(trackerBackupFile):
+                os.remove(trackerBackupFile)
+            shutil.copy(trackerJsonFile, trackerBackupFile)
             os.remove(trackerJsonFile)
-            
+
             for comic in comicList:
                 configExists = Path(trackerJsonFile)
                 if comic["comicUrl"] != selectedComic["comicUrl"]:
@@ -498,7 +502,7 @@ class GlobalFunctions:
         ***PLEASE MAKE YOUR SELECTION***
 
         1: Search for Comic to Add
-        2: Remove Comic from tracker
+        2: Remove Comic from tracker (NOT WORKING)
         
         Q: Quit
 
@@ -509,7 +513,7 @@ class GlobalFunctions:
         if choice == "1":
             GlobalFunctions.comicSearch()
         elif choice == "2":
-            GlobalFunctions.remove_comic()
+            GlobalFunctions.addRemoveComicMenu()
         elif choice=="Q" or choice=="q":
             GlobalFunctions.cls()
             sys.exit
